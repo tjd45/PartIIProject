@@ -136,14 +136,14 @@ public class CubeSimulator {
 
 				if(e.character=='S'){
 					Cube cube2 = new Cube(cube);
-					String solution = Solutions.longsolve(cube2, "FridrichB", false);
+					String solution = Solutions.longsolve(cube2, "Fridrich", false);
 					final String[] moves = solution.split("(?!^)");
 
 					counter = 0;
 
 
 
-					Display.getDefault().timerExec(1, new Runnable() {
+					Display.getDefault().timerExec(100, new Runnable() {
 						@Override
 						public void run(){
 							if(counter<moves.length){
@@ -153,7 +153,7 @@ public class CubeSimulator {
 
 							if(counter!=moves.length){
 								counter++;
-								Display.getDefault().timerExec(1, this);
+								Display.getDefault().timerExec(100, this);
 							}
 
 						}

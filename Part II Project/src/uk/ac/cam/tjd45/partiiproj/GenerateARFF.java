@@ -4,12 +4,12 @@ import java.io.PrintWriter;
 
 public class GenerateARFF{
 	private static char[] faceorder = {'F','R','L','U','D','B'};
-	private static int X = 5;
+	private static int X = 3;
 	private static int N = 100000;
 	
 	public static void main(String[] args){
-		String title = "Test";
-		String[] sources = {"Thomas Davidson","December, 2017"};
+		String title = "3Moves";
+		String[] sources = {"Thomas Davidson","January, 2018"};
 
 		String relation = "nextmove";
 
@@ -26,7 +26,7 @@ public class GenerateARFF{
 			writer.println("%  (a) Creator: "+srcs[0]);
 			writer.println("%  (b) Date: "+srcs[1]);
 			writer.println("%");
-			writer.println("@RELATION iris");
+			writer.println("@RELATION nextturn");
 			writer.println();
 
 			for(int i = 0; i<faceorder.length;i++){
