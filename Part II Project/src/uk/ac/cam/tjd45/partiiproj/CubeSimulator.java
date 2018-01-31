@@ -70,9 +70,9 @@ public class CubeSimulator {
 		int celldim = (((clientArea.height)-(startdepth*2))/12);
 		int startwidth =  (int) ((int)(clientArea.width/2)-(1.5*celldim));
 
-		Color[] colours = {gc.getDevice().getSystemColor(SWT.COLOR_GREEN),gc.getDevice().getSystemColor(SWT.COLOR_RED),
+		Color[] colours = {gc.getDevice().getSystemColor(SWT.COLOR_RED),gc.getDevice().getSystemColor(SWT.COLOR_YELLOW),
 				gc.getDevice().getSystemColor(SWT.COLOR_BLUE),gc.getDevice().getSystemColor(SWT.COLOR_GRAY),
-				gc.getDevice().getSystemColor(SWT.COLOR_BLACK),gc.getDevice().getSystemColor(SWT.COLOR_YELLOW)};
+				gc.getDevice().getSystemColor(SWT.COLOR_BLACK),gc.getDevice().getSystemColor(SWT.COLOR_GREEN)};
 
 		gc.setForeground(gc.getDevice().getSystemColor(SWT.COLOR_WHITE));
 
