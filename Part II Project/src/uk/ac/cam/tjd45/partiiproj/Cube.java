@@ -1,4 +1,7 @@
 package uk.ac.cam.tjd45.partiiproj;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -160,19 +163,60 @@ public class Cube{
 		}
 		char[] moves = {'F','f','U','u','R','r','L','l','D','d','B','b'};
 		Random rn = new Random();
+
+		boolean valid = false;
 		String scramble = "";
+		String checkvalid = "";
+		while(!valid){
 
-		for(int i = 0;i<X;i++){
-			char move = moves[rn.nextInt(12)];
-			this.turn(move);
-			scramble += move;
+			scramble = "";
+			
+			for(int i = 0;i<X;i++){
+				char move = moves[rn.nextInt(12)];
+				this.turn(move);
+				scramble += move;
+			}
+
+			checkvalid = Solutions.prune(scramble);
+			if(checkvalid.length()==scramble.length()){
+				valid = true;
+			}
 		}
-
 		if(p)
 			System.out.println("Cube scrambled with a "+X+" move scramble: "+scramble);
 		print = true;
-
 		return scramble;
+	}
+
+	String experimentScrambles(int pNum){
+		String scrambles = "Participant "+pNum+"\n";
+		String scram = "";
+		for(int i = 2; i<11; i++){
+			System.out.println(i+" move scramble");
+			for(int j = 0; j<3; j++){
+				scram = scramble(i,false);
+				scrambles += scram + ",";
+				System.out.println(scram);
+			}
+			scrambles+=";";
+		}
+
+		PrintWriter experiment;
+		try {
+			experiment = new PrintWriter(new FileWriter("ControlledExperimentScrambles.txt", true));
+			experiment.append(scrambles+"\n");
+
+			experiment.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return scrambles;
+
+
+
+
 	}
 
 	//crude print function to display raw state of cube

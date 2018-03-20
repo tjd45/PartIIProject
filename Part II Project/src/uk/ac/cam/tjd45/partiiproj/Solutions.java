@@ -5,18 +5,18 @@ public class Solutions {
 	private static int moves;
 	private static boolean print;
 
-	private static String[] crossmoves = {"","uFrf","RRBUU","Ru","DDBBUU","DFRf","LLbUU","lu","Frf","U","fLF","u","ufLF",
+	protected static String[] crossmoves = {"","uFrf","RRBUU","Ru","DDBBUU","DFRf","LLbUU","lu","Frf","U","fLF","u","ufLF",
 			"UU","Frfu","BUU","FFdFF","FRf","FFDFF","flF","fLFU","bUU","BBUU","bFrfu"};
 
-	private static String[] cornermoves = {"lbLRBr","lbLuBBUBubU","lbLubU","","RBrbRBr","ubUBubU","rBRBubU","DBdRBr",
+	protected static String[] cornermoves = {"lbLRBr","lbLuBBUBubU","lbLubU","","RBrbRBr","ubUBubU","rBRBubU","DBdRBr",
 			"DBdubU","LBBlubU","LblBBubU","LBlBRBr","ubU","RBr","uBBUBubU","bRBr","bubU","buBBUBubU","BRBr","BubU",
 			"BuBBUBubU","BBubU","BBuBBUBubU","BBRBr"};
 
-	private static String[] FB2lmoves = {"","RbrbuBUbRbrbuBU","lBLBUbuuBUBRbr","lBLBUbubRbrbuBU","BRbrbuBU",
+	protected static String[] FB2lmoves = {"","RbrbuBUbRbrbuBU","lBLBUbuuBUBRbr","lBLBUbubRbrbuBU","BRbrbuBU",
 			"bbuBUBRbr","BBRbrbuBU","buBUBRbr","DbdbrBRBuBUBRbr","DbdbrBRRbrbuBU","LblbdBDBRbrbuBU","LblbdBDBBuBUBRbr"
 			,"RbrbuBU","BuBUBRbr","uBUBRbr","bRbrbuBU"};
 
-	private static String[][] F2lmoves = {{"FrfR","rUURRURRUR","URUrUURUr","YUUlULUYLUlYY","uRurURUr","RurUUfuF","uRUrURUr",
+	protected static String[][] F2lmoves = {{"FrfR","rUURRURRUR","URUrUURUr","YUUlULUYLUlYY","uRurURUr","RurUUfuF","uRUrURUr",
 		"yUruRUUrURY","RUr","rFRf"},
 			{"yrUURUruRY","UURRUUruRuRR","RurUUrUURRURRUR","RurfUUF","RUUruRUr","yUURRUURUrURRY","UURUrURur","yurUURurURY",
 			"UfuFuUURUrURur","UfuFuufUUFufUF"},
@@ -25,7 +25,7 @@ public class Solutions {
 			{"fuFUfuF","uRurURur","RuruRUrUURur","RurUfuFufuF","RurURur","UfuFUfuF","UURurURur","ufuFUfuF","URurURur","UUfuFUfuF"},
 			{"fUFufUF","uRUruRUr","RUrUURurURUr","RUruRurUUfuF","RUruRUr","UfUFufUF","UURUruRUr","ufUFufUF","URUruRUr","UUfUFufUF"}};
 
-	private static String[] OLLmoves = {"","RUbLMULLMMxurFRf","rFRfUUrFRFFUUF","YlRRBrBLUUlBmx","rUUXrURuYrurUrFz",
+	protected static String[] OLLmoves = {"","RUbLMULLMMxurFRf","rFRfUUrFRFFUUF","YlRRBrBLUUlBmx","rUUXrURuYrurUrFz",
 			"RUrUrFRfUUrFRf","mUUMUUmUMUUmUUM","rUUFRUruyRRUUxRUX","FRUrUyrUUrFRf","ruYlUlyLFlFR","RuYRRDrUURdRRUf",
 			"FURurURurf","lbLurURurURlBL","lURuLUr","RUrURurURUUr","lURuLUr","rUURUrUR","rfLFRflF","RRDrUURdrUUr","rflFRfLF",
 			"muMUUmuM","lRUruLrFRf","LFrFRFFl","FrfRURur","ruRyxRurFRUrX","uRUUruRuRRyruRUB","FRUruRUruf","LflFUULLyLFlF",
@@ -34,7 +34,7 @@ public class Solutions {
 			"rMUURUrURm","RUxRurUXur","RUruXdrURzM","rFRUrfRYLul","LfluLFlyrUR","lbLruRUlBL","RBrLUluRbr","FURurf",
 			"ruFURurfR","LUfulULFl","fulULF","FRUruf","RUrurFRf","LUlULuluYYrFRf","ruRurURUYFrfR","rFRUruYlUF","LfluLUyRuf"};
 	
-	private static String[] PLLmoves = {"","XrUrDDRurDDRRx","xRuRDDrURDDRRX","RRURUrururUr","RuRURURuruRR","MMUMMUUMMUMM",
+	protected static String[] PLLmoves = {"","XrUrDDRurDDRRx","xRuRDDrURDDRRX","RRURUrururUr","RuRURURuruRR","MMUMMUUMMUMM",
 			"RUrurFRRuruRUrf","rUlUURurUURLu","RUrfRUrurFRRuru","LUUlUULfluLULFLLU","rUURUUrFRUrurfRRu","rUruYrfRRurUrFRF",
 			"RRDYrUruRdyRRyrUR","ruRYRRDYrURuRdyRR","RRdyRuRUrDYRRYRur","RUryRRdyRurUrDYRR","rUUruYrfRRurUrFRuF",
 			"MMUMMUmUUMMUUmUU","FRuruRUrfRUrurFRf","LuRUUlUrLuRUUlUrU","rUlUURuLrUlUURuLu","xRurDRUrDDYYrURDruRX"};
@@ -55,6 +55,50 @@ public class Solutions {
 		case "Fridrich" : Fridrich(cube);return prune(algorithm);
 		}
 		return "";
+	}
+	
+	static int[] stepSolve(Cube cube,String method, boolean p){
+		print = p;
+		int[] steps = new int[8];
+		
+		switch(method){
+		case "FridrichB" : 
+		algorithm = "";
+		
+		FBcross(cube);
+		steps[0]=prune(algorithm).length();
+		FBcorners(cube);
+		steps[1]=prune(algorithm).length()-steps[0];
+		FB2l(cube);
+		steps[2]=prune(algorithm).length()-steps[1];
+		FBtopcross(cube);
+		steps[3]=prune(algorithm).length()-steps[2];
+		FBpermcross(cube);
+		steps[4]=prune(algorithm).length()-steps[3];
+		FBpermcorners(cube);
+		steps[5]=prune(algorithm).length()-steps[4];
+		FBorientcorners(cube);
+		steps[6]=prune(algorithm).length()-steps[5];
+		steps[7]=prune(algorithm).length();
+		
+		return steps;// return prune(algorithm);
+		case "Fridrich" : 
+			algorithm = "";
+			FBcross(cube);
+			steps[0]=prune(algorithm).length();
+			steps[1]=steps[0];
+			FF2l(cube);
+			steps[2]=prune(algorithm).length()-steps[1];
+			steps[3]=steps[2];
+			FOLL(cube);
+			steps[4]=prune(algorithm).length()-steps[3];
+			steps[5]=steps[4];
+			FPLL(cube);
+			steps[6]=prune(algorithm).length()-steps[5];
+			steps[7]=prune(algorithm).length();
+			Fridrich(cube);return steps;
+		}
+		return steps;
 	}
 
 	static String invert(String alg){
@@ -83,6 +127,13 @@ public class Solutions {
 		alg = alg.replace("Dd", "");
 		alg = alg.replace("Bb", "");
 
+		alg = alg.replace("rR", "");
+		alg = alg.replace("uU", "");
+		alg = alg.replace("lL", "");
+		alg = alg.replace("fF", "");
+		alg = alg.replace("dD", "");
+		alg = alg.replace("bB", "");
+		
 		alg = alg.replace("RRRR", "");
 		alg = alg.replace("UUUU", "");
 		alg = alg.replace("LLLL", "");
@@ -129,6 +180,13 @@ public class Solutions {
 		alg = alg.replace("Ff", "");
 		alg = alg.replace("Dd", "");
 		alg = alg.replace("Bb", "");
+		
+		alg = alg.replace("rR", "");
+		alg = alg.replace("uU", "");
+		alg = alg.replace("lL", "");
+		alg = alg.replace("fF", "");
+		alg = alg.replace("dD", "");
+		alg = alg.replace("bB", "");
 
 		alg = alg.replace("RRRR", "");
 		alg = alg.replace("UUUU", "");

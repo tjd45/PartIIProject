@@ -134,9 +134,15 @@ public class CubeSimulator {
 				cube.performAlgorithm(alg, false);
 				canvas.redraw();
 
-				if(e.character=='S'){
+				if((e.character=='S')||(e.character=='s')){
 					Cube cube2 = new Cube(cube);
-					String solution = Solutions.longsolve(cube2, "Fridrich", false);
+					String solution = "";
+					if(e.character=='s'){
+						solution = Solutions.longsolve(cube2, "FridrichB", false);
+					}else{
+						solution = Solutions.longsolve(cube2, "Fridrich", false);
+					}
+					
 					final String[] moves = solution.split("(?!^)");
 
 					counter = 0;

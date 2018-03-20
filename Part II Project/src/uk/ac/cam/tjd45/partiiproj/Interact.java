@@ -8,27 +8,32 @@ public class Interact {
 		//Cube cube = new Cube("rrRLDdFdlU");
 
 		Cube cube = new Cube();
-		System.out.println(cube.solved());
-		cube.prettyPrint();
-		System.out.println(cube.arffPrint());
+		
+		cube.experimentScrambles(6);
+		
+		//System.out.println(cube.solved());
+		//cube.prettyPrint();
+		//System.out.println(cube.arffPrint());
 		
 		
 		//System.out.println(cube.arffScramble(3));
 		
-		String scramble = cube.scramble(1, false);
-		System.out.println(cube.solved());
-		cube.prettyPrint();
-		cube.arffPrint();
+		//String scramble = cube.scramble(1, false);
+		//System.out.println(cube.solved());
+		//System.out.println("Ugly Print");
+		//cube.print();
+		//cube.arffPrint();
 		 
 		
 //		System.out.println(scramble);
 //		
 //		System.out.println(cube.arffPrint());
 //		
-		String rev = Solutions.invert(scramble);
-		cube.performAlgorithm(rev, false);
-		System.out.println(cube.solved());
-		cube.prettyPrint();
+		//String rev = Solutions.invert(scramble);
+		//cube.performAlgorithm(rev, false);
+		//System.out.println(cube.solved());
+		//System.out.println("\nPretty Print");
+		//cube.prettyPrint();
 		
 //		System.out.println(rev);
 //		
