@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 public class MetricsGatherer {
 
 	public static void main(String[] args){
-		String algorithm = "";
+		String method = "Fridrich";
 		long duration = 0;
 		
 		Cube cube = new Cube();
@@ -26,8 +26,8 @@ public class MetricsGatherer {
 		PrintWriter pw,pw2;
 		try {
 			
-			pw = new PrintWriter(new File("FridrichPerformance.csv"));
-			pw2 = new PrintWriter(new File("FridrichPerformanceOverview.csv"));
+			pw = new PrintWriter(new File(method+"Performance.csv"));
+			pw2 = new PrintWriter(new File(method+"PerformanceOverview.csv"));
 			
 			
 			StringBuilder sb = new StringBuilder();
@@ -65,12 +65,15 @@ public class MetricsGatherer {
 					cube.scramble(i+1,false);
 
 					//algorithm = Solutions.solve(cube,"FridrichB",false);
-					stepSolveLens = Solutions.stepSolve(cube, "FridrichB", false);
+					//stepSolveLens = Solutions.stepSolve(cube, method, false);
+					stepSolveLens[7] = Solutions.attemptNeuralSolve(cube, false, 200).length();
 					//clength = (algorithm.length());
 					
 					for(int k = 0; k<8 ; k++){
 						clength[k]=stepSolveLens[k];
 						if(clength[k] % 2 == 1){
+							
+							//System.out.println(k+" ,"+clength[k]);
 							numodd[i][k]++;
 						}
 					}
@@ -119,7 +122,7 @@ public class MetricsGatherer {
 		for(int i=0;i<20;i++){
 			System.out.print(i+1+" moves: "+averages[i]);
 			for(int j = 0; j<8; j++){
-				System.out.print(" O: "+numodd[i][j]+ " E: "+(10000-numodd[i][j]));
+				//System.out.print(" O: "+numodd[i][j]+ " E: "+(10000-numodd[i][j]));
 			}
 			System.out.println();
 		}

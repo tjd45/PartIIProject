@@ -57,6 +57,23 @@ public class Solutions {
 		return "";
 	}
 	
+	static String attemptNeuralSolve(Cube cube, boolean p, int maxMoves){
+		print = p;
+		algorithm = "";
+		int i = 0;
+		
+		while(!cube.solved()&&i<maxMoves){
+			
+			char nm = NeuralNetwork.predictNextMove(cube, "Model_20");
+			cube.performAlgorithm(Character.toString(nm), p);
+			i++;
+			algorithm += nm;
+		}
+		
+		
+		return algorithm;
+	}
+	
 	static int[] stepSolve(Cube cube,String method, boolean p){
 		print = p;
 		int[] steps = new int[8];

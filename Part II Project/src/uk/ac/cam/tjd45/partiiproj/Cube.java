@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
+import weka.core.DenseInstance;
+import weka.core.Instance;
+
 public class Cube{
 	private int N = 3; //3x3x3 Rubik's cube
 	protected byte[][] Fface; //Front face
@@ -1049,5 +1052,18 @@ public class Cube{
 		if(p){
 			this.prettyPrint();
 		}
+	}
+	
+	Instance setInstance(Instance inst){
+	
+		String state = this.arffPrint();
+		String[] split = state.split(",");
+		
+		for(int i = 0; i<54; i++){
+			inst.setValue(i, Integer.parseInt(split[i]));
+		}
+		
+		return inst;
+		
 	}
 }

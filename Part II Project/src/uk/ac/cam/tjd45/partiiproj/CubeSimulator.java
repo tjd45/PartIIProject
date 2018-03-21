@@ -134,13 +134,15 @@ public class CubeSimulator {
 				cube.performAlgorithm(alg, false);
 				canvas.redraw();
 
-				if((e.character=='S')||(e.character=='s')){
+				if((e.character=='S')||(e.character=='s')||(e.character=='N')||(e.character=='n')){
 					Cube cube2 = new Cube(cube);
 					String solution = "";
 					if(e.character=='s'){
 						solution = Solutions.longsolve(cube2, "FridrichB", false);
-					}else{
+					}else if(e.character=='S'){
 						solution = Solutions.longsolve(cube2, "Fridrich", false);
+					}else{
+						solution = Solutions.attemptNeuralSolve(cube2, false, 10);
 					}
 					
 					final String[] moves = solution.split("(?!^)");
