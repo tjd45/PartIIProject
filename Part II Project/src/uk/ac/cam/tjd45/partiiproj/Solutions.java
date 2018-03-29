@@ -67,6 +67,15 @@ public class Solutions {
 	protected static int loopcounter6 = 0;
 	protected static int loopcounter7 = 0;
 
+	static String longlongsolve(Cube cube,String method, boolean p){
+		print = p;
+		switch(method){
+		case "CFOP" : FridrichB(cube);return algorithm;// return prune(algorithm);
+		case "Fridrich" : Fridrich(cube);return algorithm;
+		}
+		return "";
+	}
+	
 	static String longsolve(Cube cube,String method, boolean p){
 		print = p;
 		switch(method){

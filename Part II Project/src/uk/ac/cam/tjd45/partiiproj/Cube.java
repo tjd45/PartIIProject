@@ -159,8 +159,76 @@ public class Cube{
 		print = holder;
 		return arff;
 	}
+	
 	//Function to scramble a cube using a set number of turns
-	String scramble(int X,boolean p){
+		String scramble(int X,boolean p){
+			if(!p){
+				print = false;
+			}
+			char[] moves = {'F','f','U','u','R','r','L','l','D','d','B','b'};
+			Random rn = new Random();
+
+			boolean valid = false;
+			String scramble = "";
+			String checkvalid = "";
+			while(!valid){
+
+				scramble = "";
+				
+				for(int i = 0;i<X;i++){
+					char move = moves[rn.nextInt(12)];
+					//this.turn(move);
+					scramble += move;
+				}
+
+				checkvalid = Solutions.prune(scramble);
+				if(checkvalid.length()==scramble.length()){
+					valid = true;
+				}
+			}
+			this.performAlgorithm(scramble, false);
+			if(p)
+				System.out.println("Cube scrambled with a "+X+" move scramble: "+scramble);
+			print = true;
+			return scramble;
+		}
+		
+		//Function to scramble a cube using a set number of turns
+		String analyseScramble(int X,boolean p){
+			if(!p){
+				print = false;
+			}
+			char[] moves = {'F','f','U','u','R','r','L','l','D','d','B','b'};
+			Random rn = new Random();
+
+			boolean valid = false;
+			String scramble = "";
+			String checkvalid = "";
+			String realscramble = "";
+			while(!valid){
+
+				scramble = "";
+				
+				for(int i = 0;i<X;i++){
+					char move = moves[rn.nextInt(12)];
+					this.turn(move);
+					scramble += move;
+					realscramble += move;
+				}
+
+				checkvalid = Solutions.prune(scramble);
+				if(checkvalid.length()==scramble.length()){
+					valid = true;
+				}
+			}
+			if(p)
+				System.out.println("Cube scrambled with a "+X+" move scramble: "+scramble);
+			
+			print = true;
+			return realscramble;
+		}
+	//Original function to scramble a cube using a set number of turns, later found to be flawed
+	String flawedScramble(int X,boolean p){
 		if(!p){
 			print = false;
 		}

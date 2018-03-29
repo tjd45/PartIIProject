@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 public class MetricsGatherer {
 
 	public static void main(String[] args){
+		int N = 10000;
 		String method = "Fridrich";
 		long duration = 0;
 		
@@ -28,8 +29,8 @@ public class MetricsGatherer {
 		PrintWriter pw,pw2;
 		try {
 			
-			pw = new PrintWriter(new File(method+"Performance.csv"));
-			pw2 = new PrintWriter(new File(method+"PerformanceOverview.csv"));
+			pw = new PrintWriter(new File(method+"PerformanceUD.csv"));
+			pw2 = new PrintWriter(new File(method+"PerformanceOverviewUD.csv"));
 			
 			
 			StringBuilder sb = new StringBuilder();
@@ -61,7 +62,7 @@ public class MetricsGatherer {
 				java.util.Arrays.fill(solveLens, 0);
 				sb.append(i+1);
 				sb2.append(i+1);
-				for(int j = 0;j<10000;j++){
+				for(int j = 0;j<N;j++){
 					
 					cube = new Cube();
 					cube.scramble(i+1,false);
@@ -105,7 +106,7 @@ public class MetricsGatherer {
 				}
 				sb.append('\n');
 				sb2.append('\n');
-				averages[i]=(float)rlength[7]/10000;
+				averages[i]=(float)rlength[7]/N;
 
 			}
 			
@@ -123,7 +124,7 @@ public class MetricsGatherer {
 		for(int i=0;i<40;i++){
 			System.out.print(i+1+" moves: "+averages[i]);
 			for(int j = 0; j<8; j++){
-				System.out.print(" O: "+numodd[i][j]+ " E: "+(10000-numodd[i][j]));
+				System.out.print(" O: "+numodd[i][j]+ " E: "+(N-numodd[i][j]));
 			}
 			System.out.println();
 		}
