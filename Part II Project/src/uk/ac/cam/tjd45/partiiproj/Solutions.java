@@ -4,6 +4,8 @@ public class Solutions {
 	private static String algorithm;
 	private static int moves;
 	private static boolean print;
+	private static String defaultModel = "Model_80";
+
 
 	protected static String[] crossmoves = {"","uFrf","RRBUU","Ru","DDBBUU","DFRf","LLbUU","lu","Frf","U","fLF","u","ufLF",
 			"UU","Frfu","BUU","FFdFF","FRf","FFDFF","flF","fLFU","bUU","BBUU","bFrfu"};
@@ -15,6 +17,15 @@ public class Solutions {
 	protected static String[] FB2lmoves = {"","RbrbuBUbRbrbuBU","lBLBUbuuBUBRbr","lBLBUbubRbrbuBU","BRbrbuBU",
 			"bbuBUBRbr","BBRbrbuBU","buBUBRbr","DbdbrBRBuBUBRbr","DbdbrBRRbrbuBU","LblbdBDBRbrbuBU","LblbdBDBBuBUBRbr"
 			,"RbrbuBU","BuBUBRbr","uBUBRbr","bRbrbuBU"};
+
+	protected static String[] topCrossMoves = {"FRUruf","UFRUruf","FRUruRUrufUFRUruf","FRUruRUruf",
+			"uFRUruRUruf","FRUrufUFRUruf","UFRUruRUruf"};
+
+	protected static String[] tcPermMoves = {"U","RUrURUUr","BUbUBUUb","U","FUfUFUUf","U","RUrURUUr","LUlULUUl",
+			"RUrURUUrU","U","U"};
+
+	protected static String[] tcorPermMoves = {"URulUruL","UFubUfuB","URulUruL","URulUruL","UBufUbuF","URulUruL",
+			"URulUruL","ULurUluR","URulUruL","URulUruL","URulUruL"};
 
 	protected static String[][] F2lmoves = {{"FrfR","rUURRURRUR","URUrUURUr","YUUlULUYLUlYY","uRurURUr","RurUUfuF","uRUrURUr",
 		"yUruRUUrURY","RUr","rFRf"},
@@ -33,72 +44,99 @@ public class Solutions {
 			"lbLurURlBL","UURmRRuRurUURuM","xuRuRRFXRUruRBB","LuyrUUrURuRUURuf","UUlmLLUlULUUlUM","RRUrbRuRRULMUlm",
 			"rMUURUrURm","RUxRurUXur","RUruXdrURzM","rFRUrfRYLul","LfluLFlyrUR","lbLruRUlBL","RBrLUluRbr","FURurf",
 			"ruFURurfR","LUfulULFl","fulULF","FRUruf","RUrurFRf","LUlULuluYYrFRf","ruRurURUYFrfR","rFRUruYlUF","LfluLUyRuf"};
-	
+
 	protected static String[] PLLmoves = {"","XrUrDDRurDDRRx","xRuRDDrURDDRRX","RRURUrururUr","RuRURURuruRR","MMUMMUUMMUMM",
 			"RUrurFRRuruRUrf","rUlUURurUURLu","RUrfRUrurFRRuru","LUUlUULfluLULFLLU","rUURUUrFRUrurfRRu","rUruYrfRRurUrFRF",
 			"RRDYrUruRdyRRyrUR","ruRYRRDYrURuRdyRR","RRdyRuRUrDYRRYRur","RUryRRdyRurUrDYRR","rUUruYrfRRurUrFRuF",
 			"MMUMMUmUUMMUUmUU","FRuruRUrfRUrurFRf","LuRUUlUrLuRUUlUrU","rUlUURuLrUlUURuLu","xRurDRUrDDYYrURDruRX"};
-	
+
+
+
+	protected static int[] counter1 = new int[crossmoves.length];
+	protected static int[] counter2 = new int[cornermoves.length];
+	protected static int[] counter3 = new int[FB2lmoves.length];
+	protected static int[] counter4 = new int[topCrossMoves.length];
+	protected static int[] counter5 = new int[tcPermMoves.length];
+	protected static int[] counter6 = new int[tcorPermMoves.length];
+	protected static int[] counter7 = new int[3];
+	protected static int loopcounter1 = 0;
+	protected static int loopcounter2 = 0;
+	protected static int loopcounter3 = 0;
+	protected static int loopcounter4 = 0;
+	protected static int loopcounter5 = 0;
+	protected static int loopcounter6 = 0;
+	protected static int loopcounter7 = 0;
+
 	static String longsolve(Cube cube,String method, boolean p){
 		print = p;
 		switch(method){
-		case "FridrichB" : FridrichB(cube);return semiprune(algorithm);// return prune(algorithm);
+		case "CFOP" : FridrichB(cube);return semiprune(algorithm);// return prune(algorithm);
 		case "Fridrich" : Fridrich(cube);return semiprune(algorithm);
 		}
 		return "";
 	}
-	
+
 	static String solve(Cube cube,String method, boolean p){
 		print = p;
 		switch(method){
-		case "FridrichB" : FridrichB(cube);return prune(algorithm);// return prune(algorithm);
+		case "CFOP" : FridrichB(cube);return prune(algorithm);// return prune(algorithm);
 		case "Fridrich" : Fridrich(cube);return prune(algorithm);
 		}
 		return "";
 	}
-	
-	static String attemptNeuralSolve(Cube cube, boolean p, int maxMoves){
+
+	static String attemptNeuralSolve(Cube cube, String model, int maxMoves, boolean p){
 		print = p;
 		algorithm = "";
+		if(model.length()==0){
+			model = defaultModel;
+		}
+
 		int i = 0;
-		
+
 		while(!cube.solved()&&i<maxMoves){
-			
-			char nm = NeuralNetwork.predictNextMove(cube, "Model_20");
+
+			char nm = NeuralNetwork.predictNextMove(cube, model);
 			cube.performAlgorithm(Character.toString(nm), p);
 			i++;
 			algorithm += nm;
 		}
-		
-		
+
+
+
 		return algorithm;
 	}
-	
+
 	static int[] stepSolve(Cube cube,String method, boolean p){
 		print = p;
 		int[] steps = new int[8];
-		
+
 		switch(method){
-		case "FridrichB" : 
-		algorithm = "";
-		
-		FBcross(cube);
-		steps[0]=prune(algorithm).length();
-		FBcorners(cube);
-		steps[1]=prune(algorithm).length()-steps[0];
-		FB2l(cube);
-		steps[2]=prune(algorithm).length()-steps[1];
-		FBtopcross(cube);
-		steps[3]=prune(algorithm).length()-steps[2];
-		FBpermcross(cube);
-		steps[4]=prune(algorithm).length()-steps[3];
-		FBpermcorners(cube);
-		steps[5]=prune(algorithm).length()-steps[4];
-		FBorientcorners(cube);
-		steps[6]=prune(algorithm).length()-steps[5];
-		steps[7]=prune(algorithm).length();
-		
-		return steps;// return prune(algorithm);
+		case "CFOP" : 
+			algorithm = "";
+
+			FBcross(cube);
+			steps[0]=prune(algorithm).length();
+			FBcorners(cube);
+			steps[1]=prune(algorithm).length()-steps[0];
+			FB2l(cube);
+			steps[2]=prune(algorithm).length()-steps[1];
+			FBtopcross(cube);
+			steps[3]=prune(algorithm).length()-steps[2];
+			FBpermcross(cube);
+			steps[4]=prune(algorithm).length()-steps[3];
+			FBpermcorners(cube);
+			steps[5]=prune(algorithm).length()-steps[4];
+			FBorientcorners(cube);
+			steps[6]=prune(algorithm).length()-steps[5];
+			steps[7]=prune(algorithm).length();
+
+			//		System.out.println(loopcounter1);
+			//		for(int i = 0; i<crossmoves.length; i++){
+			//			System.out.println("Move "+i+" used "+counter1[i]+" times");
+			//		}
+
+			return steps;// return prune(algorithm);
 		case "Fridrich" : 
 			algorithm = "";
 			FBcross(cube);
@@ -118,11 +156,104 @@ public class Solutions {
 		return steps;
 	}
 
+	static int[] longStepSolve(Cube cube,String method, boolean p){
+		print = p;
+		int[] steps = new int[8];
+
+		switch(method){
+		case "CFOP" : 
+			algorithm = "";
+
+			FBcross(cube);
+			steps[0]=algorithm.length();
+			FBcorners(cube);
+			steps[1]=algorithm.length()-steps[0];
+			FB2l(cube);
+			steps[2]=algorithm.length()-steps[1];
+			FBtopcross(cube);
+			steps[3]=algorithm.length()-steps[2];
+			FBpermcross(cube);
+			steps[4]=algorithm.length()-steps[3];
+			FBpermcorners(cube);
+			steps[5]=algorithm.length()-steps[4];
+			FBorientcorners(cube);
+			steps[6]=algorithm.length()-steps[5];
+			steps[7]=algorithm.length();
+
+			return steps;// return prune(algorithm);
+		case "Fridrich" : 
+			algorithm = "";
+			FBcross(cube);
+			steps[0]=algorithm.length();
+			steps[1]=steps[0];
+			FF2l(cube);
+			steps[2]=algorithm.length()-steps[1];
+			steps[3]=steps[2];
+			FOLL(cube);
+			steps[4]=algorithm.length()-steps[3];
+			steps[5]=steps[4];
+			FPLL(cube);
+			steps[6]=algorithm.length()-steps[5];
+			steps[7]=algorithm.length();
+			Fridrich(cube);return steps;
+		}
+		return steps;
+	}
+	
+	static int[] sliceStepSolve(Cube cube,String method, boolean p){
+		print = p;
+		int[] steps = new int[8];
+
+		switch(method){
+		case "CFOP" : 
+			algorithm = "";
+
+			FBcross(cube);
+			steps[0]=sliceprune(algorithm).length();
+			FBcorners(cube);
+			steps[1]=sliceprune(algorithm).length()-steps[0];
+			FB2l(cube);
+			steps[2]=sliceprune(algorithm).length()-steps[1];
+			FBtopcross(cube);
+			steps[3]=sliceprune(algorithm).length()-steps[2];
+			FBpermcross(cube);
+			steps[4]=sliceprune(algorithm).length()-steps[3];
+			FBpermcorners(cube);
+			steps[5]=sliceprune(algorithm).length()-steps[4];
+			FBorientcorners(cube);
+			steps[6]=sliceprune(algorithm).length()-steps[5];
+			steps[7]=sliceprune(algorithm).length();
+
+			//		System.out.println(loopcounter1);
+			//		for(int i = 0; i<crossmoves.length; i++){
+			//			System.out.println("Move "+i+" used "+counter1[i]+" times");
+			//		}
+
+			return steps;// return prune(algorithm);
+		case "Fridrich" : 
+			algorithm = "";
+			FBcross(cube);
+			steps[0]=sliceprune(algorithm).length();
+			steps[1]=steps[0];
+			FF2l(cube);
+			steps[2]=sliceprune(algorithm).length()-steps[1];
+			steps[3]=steps[2];
+			FOLL(cube);
+			steps[4]=sliceprune(algorithm).length()-steps[3];
+			steps[5]=steps[4];
+			FPLL(cube);
+			steps[6]=sliceprune(algorithm).length()-steps[5];
+			steps[7]=sliceprune(algorithm).length();
+			Fridrich(cube);return steps;
+		}
+		return steps;
+	}
+
 	static String invert(String alg){
 		String revalg = new StringBuilder(alg).reverse().toString();
-		
+
 		char[] revd = revalg.toCharArray();
-		
+
 		for(int i = 0;i<revd.length;i++){
 			char current = revd[i];
 			if(Character.isUpperCase(current)){
@@ -131,10 +262,68 @@ public class Solutions {
 				revd[i] = Character.toUpperCase(current);
 			}
 		}
-		
+
 		return new String(revd);
-		
+
 	}
+	
+	static String sliceprune(String alg){
+
+		alg = alg.replace("X", "");
+		alg = alg.replace("x", "");
+		alg = alg.replace("Y", "");
+		alg = alg.replace("y", "");
+		alg = alg.replace("Z", "");
+		alg = alg.replace("z", "");
+
+		alg = alg.replace("Rr", "");
+		alg = alg.replace("Uu", "");
+		alg = alg.replace("Ll", "");
+		alg = alg.replace("Ff", "");
+		alg = alg.replace("Dd", "");
+		alg = alg.replace("Bb", "");
+
+		alg = alg.replace("rR", "");
+		alg = alg.replace("uU", "");
+		alg = alg.replace("lL", "");
+		alg = alg.replace("fF", "");
+		alg = alg.replace("dD", "");
+		alg = alg.replace("bB", "");
+
+		alg = alg.replace("RRRR", "");
+		alg = alg.replace("UUUU", "");
+		alg = alg.replace("LLLL", "");
+		alg = alg.replace("FFFF", "");
+		alg = alg.replace("DDDD", "");
+		alg = alg.replace("BBBB", "");
+
+		alg = alg.replace("rrrr", "");
+		alg = alg.replace("uuuu", "");
+		alg = alg.replace("llll", "");
+		alg = alg.replace("ffff", "");
+		alg = alg.replace("dddd", "");
+		alg = alg.replace("bbbb", "");
+
+		alg = alg.replace("rrr", "R");
+		alg = alg.replace("uuu", "U");
+		alg = alg.replace("lll", "L");
+		alg = alg.replace("fff", "F");
+		alg = alg.replace("ddd", "D");
+		alg = alg.replace("bbb", "B");
+
+		alg = alg.replace("RRR", "r");
+		alg = alg.replace("UUU", "u");
+		alg = alg.replace("LLL", "l");
+		alg = alg.replace("FFF", "f");
+		alg = alg.replace("DDD", "d");
+		alg = alg.replace("BBB", "b");
+		
+		alg = alg.replace("M", "Rl");
+		alg = alg.replace("m", "rL");
+
+		return alg;
+	}
+		
 	static String semiprune(String alg){
 
 		alg = alg.replace("Rr", "");
@@ -150,7 +339,7 @@ public class Solutions {
 		alg = alg.replace("fF", "");
 		alg = alg.replace("dD", "");
 		alg = alg.replace("bB", "");
-		
+
 		alg = alg.replace("RRRR", "");
 		alg = alg.replace("UUUU", "");
 		alg = alg.replace("LLLL", "");
@@ -190,14 +379,14 @@ public class Solutions {
 		alg = alg.replace("y", "");
 		alg = alg.replace("Z", "");
 		alg = alg.replace("z", "");
-		
+
 		alg = alg.replace("Rr", "");
 		alg = alg.replace("Uu", "");
 		alg = alg.replace("Ll", "");
 		alg = alg.replace("Ff", "");
 		alg = alg.replace("Dd", "");
 		alg = alg.replace("Bb", "");
-		
+
 		alg = alg.replace("rR", "");
 		alg = alg.replace("uU", "");
 		alg = alg.replace("lL", "");
@@ -236,6 +425,8 @@ public class Solutions {
 		return alg;
 
 	}
+	
+	
 
 	static int getEdgePos(Cube cube,byte A, byte B){
 		if(A == cube.Fface[0][1]&&B==cube.Uface[2][1]){
@@ -377,11 +568,11 @@ public class Solutions {
 					}
 
 					//System.out.println(CP+","+EP+": "+F2lmoves[CP][EP]);
-					
+
 					cube.performAlgorithm(F2lmoves[CP][EP], false);
 					alg+=F2lmoves[CP][EP];
-					
-					
+
+
 
 					ready = true;
 				}else{
@@ -428,7 +619,7 @@ public class Solutions {
 			}
 
 		}
-		
+
 		return alg;
 	}
 
@@ -476,9 +667,9 @@ public class Solutions {
 	}
 
 	static int GetOLLState(Cube cube){
-		
+
 		int state = 0;
-		
+
 		for(int i = 0;i<3;i++){
 			if(cube.Bface[2][i]==cube.Uface[1][1]){
 				state = (int) (state + Math.pow(2, i));
@@ -493,11 +684,11 @@ public class Solutions {
 				state = (int) (state + Math.pow(2, (11-i)));
 			}
 		}
-		
+
 		//System.out.println(state);
-		
-		
-		
+
+
+
 		switch(state){
 		case 0: return 0;
 		case 3770: return 1;
@@ -557,19 +748,19 @@ public class Solutions {
 		case 282: return 55;
 		case 646: return 56;
 		case 163: return 57;
-		
+
 		}
-		
+
 		return -1;
-		
+
 	}
-	
+
 	static void FOLL(Cube cube){
 		String currentalgorithm = "";
 		int shift = 0;
 		boolean oriented = false;
 		int move = -1;
-		
+
 		while(!oriented){
 			move = GetOLLState(cube);
 			if(move==0){
@@ -584,37 +775,37 @@ public class Solutions {
 						currentalgorithm = currentalgorithm + 'Y';
 						shift++;
 					}
-					
+
 				}else{
-				
+
 					cube.performAlgorithm(OLLmoves[move],false);
-					
+
 					currentalgorithm = currentalgorithm + OLLmoves[move];
 				}
-				
+
 			}
 		}
-	
+
 		if((print)&&(shift!=4))
 			System.out.println("Top Layer Oriented... " + currentalgorithm);
 		algorithm = algorithm + currentalgorithm;
-		
-		
+
+
 	}
 
-static int GetPLLState(Cube cube){
-		
+	static int GetPLLState(Cube cube){
+
 		String state = "";
 		String[] faceList = new String[6];
-		
+
 		faceList[(int)cube.Bface[1][1]]="B";
 		faceList[(int)cube.Fface[1][1]]="F";
 		faceList[(int)cube.Rface[1][1]]="R";
 		faceList[(int)cube.Lface[1][1]]="L";
 		faceList[(int)cube.Uface[1][1]]="U";
 		faceList[(int)cube.Dface[1][1]]="D";
-		
-		
+
+
 		for(int i = 0;i<3;i++){
 			state = state + faceList[(int)cube.Bface[2][i]];
 		}for(int i = 2;i>-1;i--){
@@ -624,9 +815,9 @@ static int GetPLLState(Cube cube){
 		}for(int i = 2;i>-1;i--){
 			state = state + faceList[(int)cube.Lface[0][i]];
 		}
-		
+
 		//System.out.println(state);
-		
+
 		switch(state){
 		case "BBBRRRFFFLLL": return 0;
 		case "RBRFRLBFFLLB": return 1;
@@ -651,9 +842,9 @@ static int GetPLLState(Cube cube){
 		case "BFFLRRFBBRLL": return 20;
 		case "LBRFRBRFLBLF": return 21;
 		}
-		
+
 		return -1;
-		
+
 	}
 
 	static void FPLL(Cube cube){
@@ -661,9 +852,9 @@ static int GetPLLState(Cube cube){
 		boolean permuted = false;
 		int sitch = 0;
 		int shift = 0;
-		
+
 		int move = -1;
-		
+
 		while(!permuted){
 			move = GetPLLState(cube);
 			if(move==0){
@@ -685,24 +876,24 @@ static int GetPLLState(Cube cube){
 						currentalgorithm = currentalgorithm + 'U';
 						sitch++;
 					}
-					
+
 				}else{
 					cube.performAlgorithm(PLLmoves[move],false);
 					//System.out.println(move);
 					currentalgorithm = currentalgorithm + PLLmoves[move];
 				}
-				
+
 			}
 		}
-		
+
 		if((print)&&(shift!=4))
 			System.out.println("Top Layer permuted... " + currentalgorithm);
 		algorithm = algorithm + currentalgorithm;
-		
-		
-		
-		
-		
+
+
+
+
+
 	}
 
 	static void FridrichB(Cube cube){
@@ -722,8 +913,10 @@ static int GetPLLState(Cube cube){
 	}
 
 	static void FBcross(Cube cube){
+
 		boolean cross = false;
 		int limbs = 0;
+		loopcounter1 = 0;
 
 		while(!cross){
 			if((cube.Fface[0][1]==cube.Fface[1][1])&&(cube.Uface[2][1]==cube.Uface[1][1])){
@@ -734,11 +927,16 @@ static int GetPLLState(Cube cube){
 					cross = true;
 				}
 			}else{
+
 				int move = getEdgePos(cube,cube.Fface[1][1],cube.Uface[1][1]);
+
 				cube.performAlgorithm(crossmoves[move], false);
 				algorithm = algorithm + crossmoves[move];
+				counter1[move]++;
+				loopcounter1++;
 			}
 		}
+
 
 		if((cube.Fface[0][1]==cube.Fface[1][1])&&
 				(cube.Fface[1][2]==cube.Fface[1][1])&&
@@ -762,6 +960,7 @@ static int GetPLLState(Cube cube){
 		String currentalgorithm ="";
 		boolean layer = false;
 		int limbs = 0;
+		loopcounter2=0;
 
 		while(!layer){
 			if((cube.Fface[0][2]==cube.Fface[1][1])&&(cube.Uface[2][2]==cube.Uface[1][1])&&(cube.Rface[0][0]==cube.Rface[1][1])){
@@ -775,6 +974,8 @@ static int GetPLLState(Cube cube){
 				int move = getCornerPos(cube,cube.Fface[1][1],cube.Rface[1][1],cube.Uface[1][1]);
 				cube.performAlgorithm(cornermoves[move], false);
 				currentalgorithm = currentalgorithm + cornermoves[move];
+				counter2[move]++;
+				loopcounter2++;
 			}
 		}
 
@@ -797,6 +998,7 @@ static int GetPLLState(Cube cube){
 		String currentalgorithm = "";
 		boolean l2 = false;
 		int limbs = 0;
+		loopcounter3=0;
 
 		while(!l2){
 			if((cube.Uface[1][2]==cube.Uface[1][1])&&(cube.Rface[0][1]==cube.Rface[1][1])){
@@ -810,6 +1012,8 @@ static int GetPLLState(Cube cube){
 				int move = getEdgePos(cube,cube.Uface[1][1],cube.Rface[1][1]);
 				cube.performAlgorithm(FB2lmoves[move-8], false);
 				currentalgorithm = currentalgorithm + FB2lmoves[move-8];
+				counter3[move-8]++;
+				loopcounter3++;
 			}
 		}
 
@@ -830,28 +1034,24 @@ static int GetPLLState(Cube cube){
 			cube.prettyPrint();
 		}
 
-
-
-
-
-
 	}
 
-	static String TopLayerState(Cube cube){
+	static int TopLayerState(Cube cube){
+		//bar = 0 line = 1 dot = 2 arrow1 = 3 arrow2 = 4 arrow3 = 5 arrow4 = 6
 		if((cube.Uface[1][0]==cube.Uface[1][1])&&(cube.Uface[1][2]==cube.Uface[1][1])){
-			return "bar";
+			return 0;
 		}else if((cube.Uface[0][1]==cube.Uface[1][1])&&(cube.Uface[2][1]==cube.Uface[1][1])){
-			return "line";
+			return 1;
 		}else if((cube.Uface[1][0]==cube.Uface[1][1])&&(cube.Uface[0][1]==cube.Uface[1][1])){
-			return "arrow1";
+			return 3;
 		}else if((cube.Uface[0][1]==cube.Uface[1][1])&&(cube.Uface[1][2]==cube.Uface[1][1])){
-			return "arrow2";
+			return 4;
 		}else if((cube.Uface[1][2]==cube.Uface[1][1])&&(cube.Uface[2][1]==cube.Uface[1][1])){
-			return "arrow3";
+			return 5;
 		}else if((cube.Uface[1][0]==cube.Uface[1][1])&&(cube.Uface[2][1]==cube.Uface[1][1])){
-			return "arrow4";
+			return 6;
 		}else{
-			return "dot";
+			return 2;
 		}
 	}
 
@@ -859,28 +1059,35 @@ static int GetPLLState(Cube cube){
 		String currentalgorithm = "";
 		boolean cross = false;
 		int limbs = 0;
+		loopcounter4=0;
+
 
 		while(!cross){
 			if((cube.Uface[0][1]==cube.Uface[1][1])&&(cube.Uface[1][0]==cube.Uface[1][1])&&(cube.Uface[1][2]==cube.Uface[1][1])&&(cube.Uface[2][1]==cube.Uface[1][1])){
 				cross=true;
 			}else{
-				String state = TopLayerState(cube);
-				switch(state){
-				case "bar" : cube.performAlgorithm("FRUruf",false);currentalgorithm=currentalgorithm+"FRUruf";
-				break;
-				case "line" : cube.performAlgorithm("UFRUruf",false);currentalgorithm=currentalgorithm+"UFRUruf";
-				break;
-				case "dot" : cube.performAlgorithm("FRUruRUrufUFRUruf",false);currentalgorithm=currentalgorithm+"FRUruRUrufUFRUruf";
-				break;
-				case "arrow1" : cube.performAlgorithm("FRUruRUruf",false);currentalgorithm=currentalgorithm+"FRUruRUruf";
-				break;
-				case "arrow2" : cube.performAlgorithm("uFRUruRUruf",false);currentalgorithm=currentalgorithm+"uFRUruRUruf";
-				break;
-				case "arrow3" : cube.performAlgorithm("FRUrufUFRUruf",false);currentalgorithm=currentalgorithm+"FRUrufUFRUruf";
-				break;
-				case "arrow4" : cube.performAlgorithm("UFRUruRUruf",false);currentalgorithm=currentalgorithm+"UFRUruRUruf";
-				break;
-				}
+				int state = TopLayerState(cube);
+				cube.performAlgorithm(topCrossMoves[state], false);
+				currentalgorithm = currentalgorithm + topCrossMoves[state];
+				counter4[state]++;
+				loopcounter4++;
+				//				switch(state){
+				//				//bar = 0 line = 1 dot = 2 arrow1 = 3 arrow2 = 4 arrow3 = 5 arrow4 = 6
+				//				case "bar" : cube.performAlgorithm("FRUruf",false);currentalgorithm=currentalgorithm+"FRUruf";
+				//				break;
+				//				case "line" : cube.performAlgorithm("UFRUruf",false);currentalgorithm=currentalgorithm+"UFRUruf";
+				//				break;
+				//				case "dot" : cube.performAlgorithm("FRUruRUrufUFRUruf",false);currentalgorithm=currentalgorithm+"FRUruRUrufUFRUruf";
+				//				break;
+				//				case "arrow1" : cube.performAlgorithm("FRUruRUruf",false);currentalgorithm=currentalgorithm+"FRUruRUruf";
+				//				break;
+				//				case "arrow2" : cube.performAlgorithm("uFRUruRUruf",false);currentalgorithm=currentalgorithm+"uFRUruRUruf";
+				//				break;
+				//				case "arrow3" : cube.performAlgorithm("FRUrufUFRUruf",false);currentalgorithm=currentalgorithm+"FRUrufUFRUruf";
+				//				break;
+				//				case "arrow4" : cube.performAlgorithm("UFRUruRUruf",false);currentalgorithm=currentalgorithm+"UFRUruRUruf";
+				//				break;
+				//				}
 
 			}
 		}
@@ -917,35 +1124,37 @@ static int GetPLLState(Cube cube){
 		boolean permed = false;
 		int state = 0;
 		String currentalgorithm = "";
+		loopcounter5=0;
 
 		while(!permed){
 			state = NoEdgesInPlace(cube);
 			switch(state){
-			case 0:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';
+			case 0:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';counter5[0]++;
 			break;
-			case 1:cube.performAlgorithm("RUrURUUr", false);currentalgorithm=currentalgorithm+"RURURUUr";
+			case 1:cube.performAlgorithm("RUrURUUr", false);currentalgorithm=currentalgorithm+"RUrURUUr";counter5[1]++;//there was a disparity here where the third r was capitalised in the currentalgorithm
 			break;
-			case 2:cube.performAlgorithm("BUbUBUUb", false);currentalgorithm=currentalgorithm+"BUbUBUUb";
+			case 2:cube.performAlgorithm("BUbUBUUb", false);currentalgorithm=currentalgorithm+"BUbUBUUb";counter5[2]++;
 			break;
-			case 3:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';
+			case 3:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';counter5[3]++;
 			break;
-			case 4:cube.performAlgorithm("FUfUFUUf", false);currentalgorithm=currentalgorithm+"FUfUFUUf";
+			case 4:cube.performAlgorithm("FUfUFUUf", false);currentalgorithm=currentalgorithm+"FUfUFUUf";counter5[4]++;
 			break;
-			case 5:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';
+			case 5:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';counter5[5]++;
 			break;
-			case 6:cube.performAlgorithm("RUrURUUr", false);currentalgorithm=currentalgorithm+"FUfUFUUf";
+			case 6:cube.performAlgorithm("RUrURUUr", false);currentalgorithm=currentalgorithm+"RUrURUUr";counter5[6]++;//another disparity here where this currentalg was same as case 4
 			break;
-			case 8:cube.performAlgorithm("LUlULUUl", false);currentalgorithm=currentalgorithm+"LUlULUUl";
+			case 8:cube.performAlgorithm("LUlULUUl", false);currentalgorithm=currentalgorithm+"LUlULUUl";counter5[7]++;
 			break;
-			case 9:cube.performAlgorithm("RUrURUUrU", false);currentalgorithm=currentalgorithm+"RUrURUUrU";
+			case 9:cube.performAlgorithm("RUrURUUrU", false);currentalgorithm=currentalgorithm+"RUrURUUrU";counter5[8]++;
 			break;
-			case 10:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';
+			case 10:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';counter5[9]++;
 			break;
-			case 12:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';
+			case 12:cube.performAlgorithm("U", false);currentalgorithm=currentalgorithm+'U';counter5[10]++;
 			break;
 			case 15:permed = true;
 			break;
 			}
+			loopcounter5++;
 		}
 
 		if((cube.Rface[0][1]==cube.Rface[1][1])&&(cube.Fface[0][1]==cube.Fface[1][1])&&(cube.Lface[0][1]==cube.Lface[1][1])&&(cube.Bface[2][1]==cube.Bface[1][1])){
@@ -987,35 +1196,56 @@ static int GetPLLState(Cube cube){
 		boolean permed = false;
 		int state = 0;
 		String currentalgorithm = "";
+		loopcounter6=0;
 
 		while(!permed){
+
 			state = NoCornersInPlace(cube);
-			switch(state){
-			case(0):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(1):cube.performAlgorithm("UFubUfuB", false);currentalgorithm=currentalgorithm+"UFubUfuB";
-			break;
-			case(2):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(3):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(4):cube.performAlgorithm("UBufUbuF", false);currentalgorithm=currentalgorithm+"UBufUbuF";
-			break;
-			case(5):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(6):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(8):cube.performAlgorithm("ULurUluR", false);currentalgorithm=currentalgorithm+"ULurUluR";
-			break;
-			case(9):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(10):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(12):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
-			break;
-			case(15):permed=true;
-			break;
+
+			if(state!=15){
+				if(state>7){
+
+					if(state<11){
+						state = state-1;
+					}else{
+						state=10;
+					}
+				}
+
+				cube.performAlgorithm(tcorPermMoves[state], false);
+				currentalgorithm = currentalgorithm + tcorPermMoves[state];
+				counter6[state]++;
+				loopcounter6++;
+			}else{
+				permed = true;
 			}
+
+			//			switch(state){
+			//			case(0):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(1):cube.performAlgorithm("UFubUfuB", false);currentalgorithm=currentalgorithm+"UFubUfuB";
+			//			break;
+			//			case(2):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(3):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(4):cube.performAlgorithm("UBufUbuF", false);currentalgorithm=currentalgorithm+"UBufUbuF";
+			//			break;
+			//			case(5):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(6):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(8):cube.performAlgorithm("ULurUluR", false);currentalgorithm=currentalgorithm+"ULurUluR";
+			//			break;
+			//			case(9):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(10):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(12):cube.performAlgorithm("URulUruL", false);currentalgorithm=currentalgorithm+"URulUruL";
+			//			break;
+			//			case(15):permed=true;
+			//			break;
+			//			}
 		}
 
 
@@ -1029,6 +1259,7 @@ static int GetPLLState(Cube cube){
 		boolean solved = false;
 		int corners = 0;
 		String currentalgorithm = "";
+		loopcounter7=0;
 		while(!solved){
 			if((cube.Fface[0][2]==cube.Fface[0][1])&&(cube.Rface[0][0]==cube.Rface[0][1])){
 				corners ++;
@@ -1040,8 +1271,19 @@ static int GetPLLState(Cube cube){
 			}else{
 				cube.performAlgorithm("rdRDrdRD", false);
 				currentalgorithm=currentalgorithm+"rdRDrdRD";
+				loopcounter7++;
 			}
 		}
+
+		if(currentalgorithm.length()==52){
+			counter7[2]++;
+		}else if(currentalgorithm.length()==28){
+			counter7[1]++;
+		}else{
+			counter7[0]++;
+		}
+		
+
 		if(print)
 			System.out.println("Final Corners Orientation Solved..."+currentalgorithm);
 		algorithm = algorithm + currentalgorithm;

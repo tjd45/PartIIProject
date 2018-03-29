@@ -138,11 +138,11 @@ public class CubeSimulator {
 					Cube cube2 = new Cube(cube);
 					String solution = "";
 					if(e.character=='s'){
-						solution = Solutions.longsolve(cube2, "FridrichB", false);
+						solution = Solutions.longsolve(cube2, "CFOP", false);
 					}else if(e.character=='S'){
 						solution = Solutions.longsolve(cube2, "Fridrich", false);
 					}else{
-						solution = Solutions.attemptNeuralSolve(cube2, false, 10);
+						solution = Solutions.attemptNeuralSolve(cube2,"", 10,false);
 					}
 					
 					final String[] moves = solution.split("(?!^)");

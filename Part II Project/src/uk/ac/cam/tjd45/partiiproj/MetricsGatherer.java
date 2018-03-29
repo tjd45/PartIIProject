@@ -9,18 +9,20 @@ public class MetricsGatherer {
 		String method = "Fridrich";
 		long duration = 0;
 		
+		String algorithm = "";
+		
 		Cube cube = new Cube();
 		
 		int[] clength = new int[8];
 		int[] rlength = new int[8];
 		
-		int[][] numodd = new int[20][8];
+		int[][] numodd = new int[40][8];
 		
-		int maxSolve = 224;
+		int maxSolve = 250;
 		int[] stepSolveLens = new int[8];
 		
 		
-		float[] averages = new float[20];
+		float[] averages = new float[40];
 		int[] solveLens = new int[maxSolve];
 
 		PrintWriter pw,pw2;
@@ -52,7 +54,7 @@ public class MetricsGatherer {
 			long startTime = System.nanoTime();
 			
 			
-			for(int i=0;i<20;i++){
+			for(int i=0;i<40;i++){
 				for(int k = 0; k<8;k++){
 					rlength[k]=0;	
 				}
@@ -65,10 +67,9 @@ public class MetricsGatherer {
 					cube.scramble(i+1,false);
 
 					//algorithm = Solutions.solve(cube,"FridrichB",false);
-					//stepSolveLens = Solutions.stepSolve(cube, method, false);
-					stepSolveLens[7] = Solutions.attemptNeuralSolve(cube, false, 200).length();
+					stepSolveLens = Solutions.sliceStepSolve(cube, method, false);
 					//clength = (algorithm.length());
-					
+					//stepSolveLens[7] = Solutions.attemptNeuralSolve(cube,"", 200,false).length();
 					for(int k = 0; k<8 ; k++){
 						clength[k]=stepSolveLens[k];
 						if(clength[k] % 2 == 1){
@@ -119,10 +120,10 @@ public class MetricsGatherer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		for(int i=0;i<20;i++){
+		for(int i=0;i<40;i++){
 			System.out.print(i+1+" moves: "+averages[i]);
 			for(int j = 0; j<8; j++){
-				//System.out.print(" O: "+numodd[i][j]+ " E: "+(10000-numodd[i][j]));
+				System.out.print(" O: "+numodd[i][j]+ " E: "+(10000-numodd[i][j]));
 			}
 			System.out.println();
 		}
