@@ -47,7 +47,7 @@ public class NeuralNetwork {
 		initialised = true;
 	}
 
-	protected static char predictNextMove(Cube cube, String model){
+	protected static char predictNextMove(Cube cube, String model, boolean second){
 		try {
 
 			if(!initialised){
@@ -62,15 +62,28 @@ public class NeuralNetwork {
 			double[] distrib = mlp.distributionForInstance(inst);
 
 			double max = 0.0;
+			double secmax = 0.0;
+
 			int index = 0;
+			int sindex = 0;
 			for(int i = 0; i<distrib.length;i++){
 				if(distrib[i]>max){
 					index = i;
 					max = distrib[i];
+				}else if(distrib[i]>secmax){
+					sindex = i;
+					secmax = distrib[i];
 				}
 			}
 
+			if(second)
+				index = sindex;
+
+
+
 			return nextMove[index];
+
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +92,7 @@ public class NeuralNetwork {
 
 	}
 
-	protected static void analyse(String model, int N, boolean output){
+	protected static void analyse(String model, int N, int maxMoves, int backTrackIndex,int select, boolean output){
 		Cube cube = new Cube();
 		float[] solved = new float[10];
 		initialise(model);
@@ -88,10 +101,17 @@ public class NeuralNetwork {
 			for (int j = 0; j < N; j++){
 
 				cube = new Cube();
-				cube.scramble(i+1, false);
+				String scram = cube.scramble(i+1, false);
 
-
-				Solutions.attemptNeuralSolve(cube, model, 10, false);
+				if(select == 1){
+					Solutions.attemptNeuralSolve(cube, model, maxMoves, backTrackIndex, false);
+				}else if (select ==2){
+					Solutions.attemptSimpleBackNeuralSolve(cube, model, maxMoves, backTrackIndex, false);
+				}else if (select ==3){
+					Solutions.attemptdoubleBackNeuralSolve(cube, model, maxMoves, backTrackIndex, false);
+				}else{
+					Solutions.attemptSimpleNeuralSolve(cube, model, maxMoves, backTrackIndex, false);
+				}
 
 				if(cube.solved()){
 					solved[i]++;
@@ -130,7 +150,7 @@ public class NeuralNetwork {
 			}
 		}else{
 			for(int i = 0; i < 10; i++){
-				System.out.println("Percentage of "+(i+1)+" move scrambles solved: "+(solved[i]/(float) N)*100);
+				System.out.println((int)solved[i]+" "+(i+1)+" move scrambles solved: "+(solved[i]/(float) N)*100);
 			}
 		}
 
@@ -147,19 +167,19 @@ public class NeuralNetwork {
 
 		for(int j = 0; j<availableModels.length; j++){
 			initialise(availableModels[j]);
-			
+
 			for(int i = 0; i<N; i++){
 				cube = new Cube();
 
 				scramble = Solutions.invert(cube.scramble(emove, false));
-				nm = predictNextMove(cube, availableModels[j]);
+				nm = predictNextMove(cube, availableModels[j], false);
 
 				if(nm==scramble.charAt(0)){
 					correct[j]++;
 				}
 			}
 		}
-		
+
 		if(output){
 			try {
 				PrintWriter pw = new PrintWriter(new File("ModelsPerformance"+emove+"Move.csv"));
@@ -175,10 +195,10 @@ public class NeuralNetwork {
 				for(int i = 0; i <availableModels.length;i++){
 					sb.append(availableModels[i]+",");
 				}
-				
+
 				sb.append("\n");
 				sb.append(",");
-				
+
 				for(int i = 0; i <availableModels.length;i++){
 					sb.append((float)correct[i]/(float)N * 100+",");
 				}
@@ -195,7 +215,7 @@ public class NeuralNetwork {
 			for(int i = 0; i<availableModels.length;i++){
 				System.out.println(availableModels[i]+": "+(float)correct[i]/(float)N * 100);
 			}
-			
+
 		}
 
 
@@ -209,15 +229,25 @@ public class NeuralNetwork {
 		//		eval.evaluateModel(mlp, instances);
 		//		System.out.println(eval.toSummaryString("\nResults\n======\n", false));
 
+
+		//		for(int i = 1; i<11;i++){
+		//			stepAnalyse(10000,i,true);
+		//			System.out.println(i+" move completed");
+		//		}
 		long startTime = System.nanoTime();
-//		for(int i = 1; i<11;i++){
-//			stepAnalyse(10000,i,true);
-//			System.out.println(i+" move completed");
-//		}
-		analyse("Model_80",10000,false);
+		analyse("Model_80",10000,100,1,3,false);
 		long endTime = System.nanoTime();
-		long duration = endTime-startTime;
-		//System.out.println("Duration: "+duration);
+		long duration = (endTime-startTime)/1000000000;
+		System.out.println("Duration: "+duration);
+
+		startTime = System.nanoTime();
+		analyse("Model_80",10000,100,1,4,false);
+		endTime = System.nanoTime();
+		duration = (endTime-startTime)/1000000000;
+		System.out.println("Duration: "+duration);
+
+
+
 
 	}
 }

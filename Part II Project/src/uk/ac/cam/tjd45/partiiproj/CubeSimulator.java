@@ -93,7 +93,7 @@ public class CubeSimulator {
 		drawFace(gc, x, y, celldim,colours,cube.Bface);
 	}
 	/**
-	 * Open the window.
+	 * Open the window.xxXZY
 	 */
 	public void open() {
 		Display display = Display.getDefault();
@@ -142,9 +142,10 @@ public class CubeSimulator {
 					}else if(e.character=='S'){
 						solution = Solutions.longsolve(cube2, "Fridrich", false);
 					}else{
-						solution = Solutions.attemptNeuralSolve(cube2,"", 10,false);
+						solution = Solutions.attemptdoubleBackNeuralSolve(cube2,"",100,1,false);
+						
 					}
-					
+
 					final String[] moves = solution.split("(?!^)");
 
 					counter = 0;

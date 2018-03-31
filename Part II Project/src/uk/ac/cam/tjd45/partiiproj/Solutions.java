@@ -75,7 +75,7 @@ public class Solutions {
 		}
 		return "";
 	}
-	
+
 	static String longsolve(Cube cube,String method, boolean p){
 		print = p;
 		switch(method){
@@ -94,7 +94,80 @@ public class Solutions {
 		return "";
 	}
 
-	static String attemptNeuralSolve(Cube cube, String model, int maxMoves, boolean p){
+	static String attemptdoubleBackNeuralSolve(Cube cube, String model, int maxMoves, int backTrackIndex, boolean p){
+		print = p;
+		algorithm = "";
+		int backtracks = 0;
+
+		if(model.length()==0){
+			model = defaultModel;
+		}
+
+		int i = 0;
+		String currentalg = "";
+		boolean second = false;
+		while(!cube.solved()&&i<maxMoves){
+
+
+			char nm = NeuralNetwork.predictNextMove(cube, model,second);
+			second = false;
+			cube.performAlgorithm(Character.toString(nm), p);
+			i++;
+			currentalg += nm;
+			algorithm += nm;
+
+
+			if(flipflop(currentalg)){
+
+				String rev = invert(currentalg);
+				String revalg;
+				if(backtracks==0){
+
+
+					if(backTrackIndex == -1){
+						if(rev.length()>2){
+							revalg = rev.substring(2,3);
+						}else{
+							revalg = rev.substring(2,2);
+						}
+
+					}else{
+						if(rev.length()-1>(backTrackIndex)){
+							revalg = rev.substring(2,rev.length()-(backTrackIndex-1));
+						}else{
+							revalg = rev.substring(2,2);
+						}
+						backTrackIndex=-1;
+						backtracks++;
+					}
+
+
+
+
+				}
+				else{
+					if(rev.length()>2){
+						revalg = rev.substring(2,3);
+					}else{
+						revalg = rev.substring(2,2);
+					}
+
+				}
+				cube.performAlgorithm(revalg, false);
+				second = true;
+				algorithm += revalg;
+
+				currentalg = currentalg.substring(0,(currentalg.length()-revalg.length()));
+			}
+
+		}
+
+
+
+		return prune(algorithm);
+	}
+
+	static String attemptSimpleBackNeuralSolve(Cube cube, String model, int maxMoves, int backTrackIndex, boolean p){
 		print = p;
 		algorithm = "";
 		if(model.length()==0){
@@ -102,18 +175,160 @@ public class Solutions {
 		}
 
 		int i = 0;
-
+		String currentalg = "";
+		boolean second = false;
 		while(!cube.solved()&&i<maxMoves){
 
-			char nm = NeuralNetwork.predictNextMove(cube, model);
+
+			char nm = NeuralNetwork.predictNextMove(cube, model,second);
+			second = false;
 			cube.performAlgorithm(Character.toString(nm), p);
 			i++;
+			currentalg += nm;
 			algorithm += nm;
+
+			if(flipflop(currentalg)){
+				String rev = invert(currentalg);
+				String revalg;
+
+				revalg = rev.substring(2, rev.length());
+
+
+
+				cube.performAlgorithm(revalg, false);
+				second = true;
+				algorithm += revalg;
+				currentalg = "";
+			}
+
 		}
 
 
 
 		return algorithm;
+	}
+
+
+	static String attemptNeuralSolve(Cube cube, String model, int maxMoves, int backTrackIndex, boolean p){
+		print = p;
+		algorithm = "";
+		if(model.length()==0){
+			model = defaultModel;
+		}
+
+		int i = 0;
+		String currentalg = "";
+		boolean second = false;
+		while(!cube.solved()&&i<maxMoves){
+
+
+			char nm = NeuralNetwork.predictNextMove(cube, model,second);
+			second = false;
+			cube.performAlgorithm(Character.toString(nm), p);
+			i++;
+			currentalg += nm;
+			algorithm += nm;
+
+			if(flipflop(currentalg)){
+				String rev = invert(currentalg);
+				String revalg;
+
+				if(backTrackIndex == -1){
+					if(rev.length()>2){
+						revalg = rev.substring(2,3);
+					}else{
+						revalg = rev.substring(2,2);
+					}
+
+				}else{
+					if(rev.length()-1>(backTrackIndex)){
+						revalg = rev.substring(2,rev.length()-(backTrackIndex-1));
+					}else{
+						revalg = rev.substring(2,2);
+					}
+				}
+
+
+
+				cube.performAlgorithm(revalg, false);
+				second = true;
+				algorithm += revalg;
+				currentalg = "";
+			}
+
+		}
+
+
+
+		return algorithm;
+	}
+	
+	static String attemptSimpleNeuralSolve(Cube cube, String model, int maxMoves, int backTrackIndex, boolean p){
+		print = p;
+		algorithm = "";
+		if(model.length()==0){
+			model = defaultModel;
+		}
+
+		int i = 0;
+		String currentalg = "";
+		boolean second = false;
+		while(!cube.solved()&&i<maxMoves){
+
+
+			char nm = NeuralNetwork.predictNextMove(cube, model,second);
+			second = false;
+			cube.performAlgorithm(Character.toString(nm), p);
+			i++;
+			currentalg += nm;
+			algorithm += nm;
+
+			
+
+		}
+
+
+
+		return algorithm;
+	}
+
+	static boolean flipflop(String alg){
+		if(alg.length()>1){
+			char[] checker = alg.toCharArray();
+
+			char last = checker[alg.length()-1];
+			char slast = checker[alg.length()-2];
+			
+			
+
+			if(Character.isUpperCase(last)){
+				if(Character.isLowerCase(slast)){
+
+					if(last == Character.toUpperCase(slast)){
+						return true;
+					}
+				}
+			}else{
+				if(Character.isUpperCase(slast)){
+
+					if(last == Character.toLowerCase(slast)){
+						return true;
+					}
+				}
+			}
+			
+			if(alg.length()>3){
+				char tlast = checker[alg.length()-3];
+				char flast = checker[alg.length()-4];
+				
+				if((last==slast)&&(slast==tlast)&&(tlast==flast)){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+
 	}
 
 	static int[] stepSolve(Cube cube,String method, boolean p){
@@ -208,7 +423,7 @@ public class Solutions {
 		}
 		return steps;
 	}
-	
+
 	static int[] sliceStepSolve(Cube cube,String method, boolean p){
 		print = p;
 		int[] steps = new int[8];
@@ -275,7 +490,7 @@ public class Solutions {
 		return new String(revd);
 
 	}
-	
+
 	static String sliceprune(String alg){
 
 		alg = alg.replace("X", "");
@@ -326,13 +541,13 @@ public class Solutions {
 		alg = alg.replace("FFF", "f");
 		alg = alg.replace("DDD", "d");
 		alg = alg.replace("BBB", "b");
-		
+
 		alg = alg.replace("M", "Rl");
 		alg = alg.replace("m", "rL");
 
 		return alg;
 	}
-		
+
 	static String semiprune(String alg){
 
 		alg = alg.replace("Rr", "");
@@ -434,8 +649,10 @@ public class Solutions {
 		return alg;
 
 	}
-	
-	
+
+
+
+
 
 	static int getEdgePos(Cube cube,byte A, byte B){
 		if(A == cube.Fface[0][1]&&B==cube.Uface[2][1]){
@@ -1291,7 +1508,7 @@ public class Solutions {
 		}else{
 			counter7[0]++;
 		}
-		
+
 
 		if(print)
 			System.out.println("Final Corners Orientation Solved..."+currentalgorithm);

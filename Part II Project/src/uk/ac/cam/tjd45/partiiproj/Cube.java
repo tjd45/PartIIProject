@@ -177,7 +177,6 @@ public class Cube{
 				
 				for(int i = 0;i<X;i++){
 					char move = moves[rn.nextInt(12)];
-					//this.turn(move);
 					scramble += move;
 				}
 

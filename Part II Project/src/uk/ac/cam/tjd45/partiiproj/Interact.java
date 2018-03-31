@@ -32,81 +32,92 @@ public class Interact {
 		//			}
 		//		};
 
-
-		int oddcounter = 0;
-		int evencounter = 0;
-		for(int i = 0;i<10000;i++){
-			Cube cube = new Cube();
-			Cube cubeT = new Cube();
-			String scram = cubeT.scramble(19, false);
-
-			cube.performAlgorithm(scram, false);
-
-			Cube cube2 = new Cube();
-			cube2.performAlgorithm(scram, false);
-
-			Cube cube3 = new Cube();
-			cube3.performAlgorithm(scram, false);
-
-			String sol = Solutions.solve(cubeT, "CFOP", false);
-
-			String longsol = Solutions.longsolve(cube2, "CFOP", false);
-			String longlongsol = Solutions.longlongsolve(cube3, "CFOP", false);
-
-
-			if(sol.length()%2==1){
-				oddcounter++;
-				//System.out.println("Odd: "+sol.length());
-			}else{
-				evencounter++;
-				//				if(sol.length()<10){
-				//					System.out.println();
-				//					System.out.println("Scramble :"+scram);
-				//					System.out.println("Even: "+sol.length()+" : "+sol);
-				//					String OE = (((longsol.length()&2)==1) ? "Odd" : "Even");
-				//					System.out.println(OE+": "+longsol.length()+" "+longsol);
-				//					String prune = Solutions.prune(longsol);
-				//					OE = (((prune.length()%2)== 1) ? "Odd" : "Even");
-				//					System.out.println(OE+": "+prune.length()+" :"+prune);
-				//					OE = (((longlongsol.length()%2)== 1) ? "Odd" : "Even");
-				//					System.out.println(OE+": "+longlongsol.length()+" "+longlongsol);
-				//					prune = Solutions.prune(longlongsol);
-				//					OE = (((prune.length()%2)== 1) ? "Odd" : "Even");
-				//					System.out.println(OE+": "+prune.length()+" :"+prune);
-				//					System.out.println();
-				//				}
-
-			}
-		}
-
-
-		//		System.out.println("Number of odd: "+oddcounter);
-		//		System.out.println("Number of even: "+evencounter);
-
-		oddcounter = 0;
-		evencounter = 0;
-		int oddScounter = 0;
-		int evenScounter = 0;
-		for(int i = 0; i < 100000; i++){
-			Cube cube = new Cube();
-			String scram = cube.analyseScramble(19, false);
-
-			String sol = Solutions.solve(cube, "CFOP", false);
-
-			if(sol.length()%2==1){
-				oddcounter++;
-			}else{
-				evencounter++;
-			}
-			if(scram.length()%2==1){
-				oddScounter++;
-			}else
-				evenScounter++;
-		}
+		
+		Cube cube = new Cube();
+		cube.scramble(7, false);
+		
+		Solutions.attemptdoubleBackNeuralSolve(cube, "Model_80", 100, 1, false);
+		
+		cube.prettyPrint();
+		
+		
+//		int oddcounter = 0;
+//		int evencounter = 0;
+//		for(int i = 0;i<10000;i++){
+//			Cube cube = new Cube();
+//			Cube cubeT = new Cube();
+//			String scram = cubeT.scramble(19, false);
+//
+//			cube.performAlgorithm(scram, false);
+//
+//			Cube cube2 = new Cube();
+//			cube2.performAlgorithm(scram, false);
+//
+//			Cube cube3 = new Cube();
+//			cube3.performAlgorithm(scram, false);
+//
+//			String sol = Solutions.solve(cubeT, "CFOP", false);
+//
+//			String longsol = Solutions.longsolve(cube2, "CFOP", false);
+//			String longlongsol = Solutions.longlongsolve(cube3, "CFOP", false);
+//
+//
+//			if(sol.length()%2==1){
+//				oddcounter++;
+//				//System.out.println("Odd: "+sol.length());
+//			}else{
+//				evencounter++;
+//				//				if(sol.length()<10){
+//				//					System.out.println();
+//				//					System.out.println("Scramble :"+scram);
+//				//					System.out.println("Even: "+sol.length()+" : "+sol);
+//				//					String OE = (((longsol.length()&2)==1) ? "Odd" : "Even");
+//				//					System.out.println(OE+": "+longsol.length()+" "+longsol);
+//				//					String prune = Solutions.prune(longsol);
+//				//					OE = (((prune.length()%2)== 1) ? "Odd" : "Even");
+//				//					System.out.println(OE+": "+prune.length()+" :"+prune);
+//				//					OE = (((longlongsol.length()%2)== 1) ? "Odd" : "Even");
+//				//					System.out.println(OE+": "+longlongsol.length()+" "+longlongsol);
+//				//					prune = Solutions.prune(longlongsol);
+//				//					OE = (((prune.length()%2)== 1) ? "Odd" : "Even");
+//				//					System.out.println(OE+": "+prune.length()+" :"+prune);
+//				//					System.out.println();
+//				//				}
+//
+//			}
+//		}
+//
+//
+//		//		System.out.println("Number of odd: "+oddcounter);
+//		//		System.out.println("Number of even: "+evencounter);
+//
+//		oddcounter = 0;
+//		evencounter = 0;
+//		int oddScounter = 0;
+//		int evenScounter = 0;
+//		for(int i = 0; i < 100000; i++){
+//			Cube cube = new Cube();
+//			String scram = cube.analyseScramble(19, false);
+//
+//			String sol = Solutions.solve(cube, "CFOP", false);
+//
+//			if(sol.length()%2==1){
+//				oddcounter++;
+//			}else{
+//				evencounter++;
+//			}
+//			if(scram.length()%2==1){
+//				oddScounter++;
+//			}else
+//				evenScounter++;
+//		}
+//	
+//
+//	System.out.println("Number of odd solves: "+oddcounter+" Number of odd scrambles: "+oddScounter);
+//	System.out.println("Number of even solves: "+evencounter+" Number of even scrambles: "+evenScounter);
 	
-
-	System.out.println("Number of odd solves: "+oddcounter+" Number of odd scrambles: "+oddScounter);
-	System.out.println("Number of even solves: "+evencounter+" Number of even scrambles: "+evenScounter);
+	
+	
 	//		for(int i = 0; i<10; i++){
 	//		Cube cube = new Cube();
 	//		cube.performAlgorithm("brb", false);
