@@ -240,11 +240,11 @@ public class NeuralNetwork {
 		long duration = (endTime-startTime)/1000000000;
 		System.out.println("Duration: "+duration);
 
-		startTime = System.nanoTime();
-		analyse("Model_80",10000,100,1,4,false);
-		endTime = System.nanoTime();
-		duration = (endTime-startTime)/1000000000;
-		System.out.println("Duration: "+duration);
+//		startTime = System.nanoTime();
+//		analyse("Model_80",10000,100,1,4,false);
+//		endTime = System.nanoTime();
+//		duration = (endTime-startTime)/1000000000;
+//		System.out.println("Duration: "+duration);
 
 
 

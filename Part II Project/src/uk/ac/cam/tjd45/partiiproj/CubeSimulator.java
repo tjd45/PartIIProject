@@ -134,16 +134,21 @@ public class CubeSimulator {
 				cube.performAlgorithm(alg, false);
 				canvas.redraw();
 
-				if((e.character=='S')||(e.character=='s')||(e.character=='N')||(e.character=='n')){
+				if((e.character=='S')||(e.character=='s')||(e.character=='N')||(e.character=='n')||e.character=='O'||e.character=='o'||e.character=='K'||e.character=='k'){
 					Cube cube2 = new Cube(cube);
 					String solution = "";
-					if(e.character=='s'){
+					if(Character.toUpperCase(e.character)=='K'){
+						solution = cube2.scramble(20, false);
+					}
+					else if(e.character=='s'){
 						solution = Solutions.longsolve(cube2, "CFOP", false);
 					}else if(e.character=='S'){
 						solution = Solutions.longsolve(cube2, "Fridrich", false);
-					}else{
+					}else if(Character.toUpperCase(e.character)=='N'){
 						solution = Solutions.attemptdoubleBackNeuralSolve(cube2,"",100,1,false);
 						
+					}else{
+						solution = Solutions.solve(cube2,"Ortega",false);
 					}
 
 					final String[] moves = solution.split("(?!^)");

@@ -7,7 +7,7 @@ public class MetricsGatherer {
 
 	public static void main(String[] args){
 		int N = 10000;
-		String method = "Fridrich";
+		String method = "Ortega";
 		long duration = 0;
 		
 		String algorithm = "";
@@ -68,7 +68,7 @@ public class MetricsGatherer {
 					cube.scramble(i+1,false);
 
 					//algorithm = Solutions.solve(cube,"FridrichB",false);
-					stepSolveLens = Solutions.sliceStepSolve(cube, method, false);
+					stepSolveLens = Solutions.stepSolve(cube, method, false);
 					//clength = (algorithm.length());
 					//stepSolveLens[7] = Solutions.attemptNeuralSolve(cube,"", 200,false).length();
 					for(int k = 0; k<8 ; k++){

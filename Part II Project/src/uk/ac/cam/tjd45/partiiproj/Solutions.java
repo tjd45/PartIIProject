@@ -4,7 +4,7 @@ public class Solutions {
 	private static String algorithm;
 	private static int moves;
 	private static boolean print;
-	private static String defaultModel = "Model_80";
+	protected static String defaultModel = "Model_80";
 
 
 	protected static String[] crossmoves = {"","uFrf","RRBUU","Ru","DDBBUU","DFRf","LLbUU","lu","Frf","U","fLF","u","ufLF",
@@ -50,6 +50,10 @@ public class Solutions {
 			"RRDYrUruRdyRRyrUR","ruRYRRDYrURuRdyRR","RRdyRuRUrDYRRYRur","RUryRRdyRurUrDYRR","rUUruYrfRRurUrFRuF",
 			"MMUMMUmUUMMUUmUU","FRuruRUrfRUrurFRf","LuRUUlUrLuRUUlUrU","rUlUURuLrUlUURuLu","xRurDRUrDDYYrURDruRX"};
 
+	protected static String[] OTCmoves = {"fDf","","F","FDfdFDf","rdRDrdR","","FDf","rdR","rDDRDrdR","DrdR","DrDDRDrdR","DFDf","","RuBU","r","","bLUlB","bDrdB","drDDRDrdR","dFDf",
+			"ULDDlu","rdRFDf","dUUlDLUU","DDrdR"};
+
+	protected static String[] OBCmoves = {"","RUrufuF","FrfurUR","RUrURUUr","ruRurUUR","RURRfRRUr","rfuFUR","RRUUrUURR"};
 
 
 	protected static int[] counter1 = new int[crossmoves.length];
@@ -72,6 +76,7 @@ public class Solutions {
 		switch(method){
 		case "CFOP" : FridrichB(cube);return algorithm;// return prune(algorithm);
 		case "Fridrich" : Fridrich(cube);return algorithm;
+		case "Ortega": Ortega(cube);return algorithm;
 		}
 		return "";
 	}
@@ -81,6 +86,7 @@ public class Solutions {
 		switch(method){
 		case "CFOP" : FridrichB(cube);return semiprune(algorithm);// return prune(algorithm);
 		case "Fridrich" : Fridrich(cube);return semiprune(algorithm);
+		case "Ortega": Ortega(cube);return semiprune(algorithm);
 		}
 		return "";
 	}
@@ -90,6 +96,7 @@ public class Solutions {
 		switch(method){
 		case "CFOP" : FridrichB(cube);return prune(algorithm);// return prune(algorithm);
 		case "Fridrich" : Fridrich(cube);return prune(algorithm);
+		case "Ortega" : Ortega(cube);return prune(algorithm);
 		}
 		return "";
 	}
@@ -262,7 +269,7 @@ public class Solutions {
 
 		return algorithm;
 	}
-	
+
 	static String attemptSimpleNeuralSolve(Cube cube, String model, int maxMoves, int backTrackIndex, boolean p){
 		print = p;
 		algorithm = "";
@@ -283,7 +290,7 @@ public class Solutions {
 			currentalg += nm;
 			algorithm += nm;
 
-			
+
 
 		}
 
@@ -298,8 +305,8 @@ public class Solutions {
 
 			char last = checker[alg.length()-1];
 			char slast = checker[alg.length()-2];
-			
-			
+
+
 
 			if(Character.isUpperCase(last)){
 				if(Character.isLowerCase(slast)){
@@ -316,17 +323,17 @@ public class Solutions {
 					}
 				}
 			}
-			
+
 			if(alg.length()>3){
 				char tlast = checker[alg.length()-3];
 				char flast = checker[alg.length()-4];
-				
+
 				if((last==slast)&&(slast==tlast)&&(tlast==flast)){
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 
 	}
@@ -376,7 +383,27 @@ public class Solutions {
 			steps[6]=prune(algorithm).length()-steps[5];
 			steps[7]=prune(algorithm).length();
 			Fridrich(cube);return steps;
+		case "Ortega" : 
+			algorithm = "";
+			OTC(cube);
+			steps[0]=prune(algorithm).length();
+			OBC(cube);
+			steps[1]=prune(algorithm).length()-steps[0];
+			PAC(cube);
+			steps[2]=prune(algorithm).length()-steps[1];
+			OrtegaEdges(cube);
+			steps[3]=prune(algorithm).length()-steps[2];
+			OrtegaMidges(cube);
+			steps[4]=prune(algorithm).length()-steps[3];
+			OrtegaFinalAdjustments(cube);
+			steps[5]=prune(algorithm).length()-steps[4];
+			steps[6]=0;
+			steps[7]=prune(algorithm).length();
 		}
+		
+		
+		
+		
 		return steps;
 	}
 
@@ -420,6 +447,22 @@ public class Solutions {
 			steps[6]=algorithm.length()-steps[5];
 			steps[7]=algorithm.length();
 			Fridrich(cube);return steps;
+		case "Ortega" : 
+			algorithm = "";
+			OTC(cube);
+			steps[0]=algorithm.length();
+			OBC(cube);
+			steps[1]=algorithm.length()-steps[0];
+			PAC(cube);
+			steps[2]=algorithm.length()-steps[1];
+			OrtegaEdges(cube);
+			steps[3]=algorithm.length()-steps[2];
+			OrtegaMidges(cube);
+			steps[4]=algorithm.length()-steps[3];
+			OrtegaFinalAdjustments(cube);
+			steps[5]=algorithm.length()-steps[4];
+			steps[6]=0;
+			steps[7]=algorithm.length();
 		}
 		return steps;
 	}
@@ -469,6 +512,22 @@ public class Solutions {
 			steps[6]=sliceprune(algorithm).length()-steps[5];
 			steps[7]=sliceprune(algorithm).length();
 			Fridrich(cube);return steps;
+		case "Ortega" : 
+			algorithm = "";
+			OTC(cube);
+			steps[0]=sliceprune(algorithm).length();
+			OBC(cube);
+			steps[1]=sliceprune(algorithm).length()-steps[0];
+			PAC(cube);
+			steps[2]=sliceprune(algorithm).length()-steps[1];
+			OrtegaEdges(cube);
+			steps[3]=sliceprune(algorithm).length()-steps[2];
+			OrtegaMidges(cube);
+			steps[4]=sliceprune(algorithm).length()-steps[3];
+			OrtegaFinalAdjustments(cube);
+			steps[5]=sliceprune(algorithm).length()-steps[4];
+			steps[6]=0;
+			steps[7]=sliceprune(algorithm).length();
 		}
 		return steps;
 	}
@@ -506,6 +565,7 @@ public class Solutions {
 		alg = alg.replace("Ff", "");
 		alg = alg.replace("Dd", "");
 		alg = alg.replace("Bb", "");
+		alg = alg.replace("Mm", "");
 
 		alg = alg.replace("rR", "");
 		alg = alg.replace("uU", "");
@@ -513,6 +573,7 @@ public class Solutions {
 		alg = alg.replace("fF", "");
 		alg = alg.replace("dD", "");
 		alg = alg.replace("bB", "");
+		alg = alg.replace("mM", "");
 
 		alg = alg.replace("RRRR", "");
 		alg = alg.replace("UUUU", "");
@@ -520,6 +581,7 @@ public class Solutions {
 		alg = alg.replace("FFFF", "");
 		alg = alg.replace("DDDD", "");
 		alg = alg.replace("BBBB", "");
+		alg = alg.replace("MMMM", "");
 
 		alg = alg.replace("rrrr", "");
 		alg = alg.replace("uuuu", "");
@@ -527,6 +589,7 @@ public class Solutions {
 		alg = alg.replace("ffff", "");
 		alg = alg.replace("dddd", "");
 		alg = alg.replace("bbbb", "");
+		alg = alg.replace("mmmm", "");
 
 		alg = alg.replace("rrr", "R");
 		alg = alg.replace("uuu", "U");
@@ -534,6 +597,7 @@ public class Solutions {
 		alg = alg.replace("fff", "F");
 		alg = alg.replace("ddd", "D");
 		alg = alg.replace("bbb", "B");
+		alg = alg.replace("mmm", "M");
 
 		alg = alg.replace("RRR", "r");
 		alg = alg.replace("UUU", "u");
@@ -541,6 +605,7 @@ public class Solutions {
 		alg = alg.replace("FFF", "f");
 		alg = alg.replace("DDD", "d");
 		alg = alg.replace("BBB", "b");
+		alg = alg.replace("MMM", "m");
 
 		alg = alg.replace("M", "Rl");
 		alg = alg.replace("m", "rL");
@@ -610,6 +675,7 @@ public class Solutions {
 		alg = alg.replace("Ff", "");
 		alg = alg.replace("Dd", "");
 		alg = alg.replace("Bb", "");
+		alg = alg.replace("Mm", "");
 
 		alg = alg.replace("rR", "");
 		alg = alg.replace("uU", "");
@@ -617,6 +683,7 @@ public class Solutions {
 		alg = alg.replace("fF", "");
 		alg = alg.replace("dD", "");
 		alg = alg.replace("bB", "");
+		alg = alg.replace("mM", "");
 
 		alg = alg.replace("RRRR", "");
 		alg = alg.replace("UUUU", "");
@@ -624,6 +691,7 @@ public class Solutions {
 		alg = alg.replace("FFFF", "");
 		alg = alg.replace("DDDD", "");
 		alg = alg.replace("BBBB", "");
+		alg = alg.replace("MMMM", "");
 
 		alg = alg.replace("rrrr", "");
 		alg = alg.replace("uuuu", "");
@@ -631,6 +699,7 @@ public class Solutions {
 		alg = alg.replace("ffff", "");
 		alg = alg.replace("dddd", "");
 		alg = alg.replace("bbbb", "");
+		alg = alg.replace("mmmm", "");
 
 		alg = alg.replace("rrr", "R");
 		alg = alg.replace("uuu", "U");
@@ -638,6 +707,7 @@ public class Solutions {
 		alg = alg.replace("fff", "F");
 		alg = alg.replace("ddd", "D");
 		alg = alg.replace("bbb", "B");
+		alg = alg.replace("mmm", "M");
 
 		alg = alg.replace("RRR", "r");
 		alg = alg.replace("UUU", "u");
@@ -645,6 +715,7 @@ public class Solutions {
 		alg = alg.replace("FFF", "f");
 		alg = alg.replace("DDD", "d");
 		alg = alg.replace("BBB", "b");
+		alg = alg.replace("MMM", "m");
 
 		return alg;
 
@@ -761,6 +832,62 @@ public class Solutions {
 
 		cube.prettyPrint();
 		System.out.println("Can't find edge "+A+" "+B+" "+ C);
+		return -1;
+	}
+
+	static int getOrtegaCornerPos(Cube cube, byte A){
+		if(A==cube.Uface[2][2]){
+			return 5;
+		}else if(A==cube.Fface[0][0]){
+			return 0;
+		}else if(A==cube.Lface[0][2]){
+			return 2;
+		}else if(A==cube.Fface[0][2]){
+			return 3;
+		}else if(A==cube.Rface[0][0]){
+			return 4;
+		}else if(A==cube.Fface[2][2]){
+			return 6;
+		}else if(A==cube.Rface[2][0]){
+			return 7;
+		}else if(A==cube.Dface[0][2]){
+			return 8;
+		}else if(A==cube.Fface[2][0]){
+			return 9;
+		}else if(A==cube.Dface[0][0]){
+			return 10;
+		}else if(A==cube.Lface[2][2]){
+			return 11;
+		}else if(A==cube.Rface[0][2]){
+			return 13;
+		}else if(A==cube.Bface[2][2]){
+			return 14;
+		}else if(A==cube.Lface[0][0]){
+			return 16;
+		}else if(A==cube.Bface[2][0]){
+			return 17;
+		}else if(A==cube.Dface[2][2]){
+			return 18;
+		}else if(A==cube.Rface[2][2]){
+			return 19;
+		}else if(A==cube.Bface[0][2]){
+			return 20;
+		}else if(A==cube.Dface[2][0]){
+			return 21;
+		}else if(A==cube.Bface[0][0]){
+			return 22;
+		}else if(A==cube.Lface[2][0]){
+			return 23;
+		}else if(A==cube.Uface[0][2]){
+			return 12;
+		}else if(A==cube.Uface[0][0]){
+			return 15;
+		}else if(A==cube.Uface[2][0]){
+			return 1;
+		}
+
+		cube.prettyPrint();
+		System.out.println("Can't find edge "+A);
 		return -1;
 	}
 
@@ -1513,6 +1640,780 @@ public class Solutions {
 		if(print)
 			System.out.println("Final Corners Orientation Solved..."+currentalgorithm);
 		algorithm = algorithm + currentalgorithm;
+	}
+
+
+
+	static void OTC(Cube cube){
+		String currentalgorithm ="";
+		String moveselection = "";
+		boolean corners = false;
+		int limbs = 0;
+
+		while(!corners){
+
+
+			if(cube.Uface[2][2]==cube.Uface[1][1]){
+				cube.performAlgorithm("Y",false);
+				currentalgorithm = currentalgorithm + 'Y';
+				limbs++;
+				if(limbs == 4){
+					corners = true;
+				}
+			}else{
+				int move = getOrtegaCornerPos(cube,cube.Uface[1][1]);
+
+
+				cube.performAlgorithm(OTCmoves[move], false);
+				currentalgorithm = currentalgorithm + OTCmoves[move];
+				moveselection = moveselection + move + ",";
+
+			}
+
+		}
+
+
+		if((cube.Uface[0][0]==cube.Uface[1][1])&&(cube.Uface[0][2]==cube.Uface[1][1])&&(cube.Uface[2][0]==cube.Uface[1][1])&&
+				(cube.Uface[2][2]==cube.Uface[1][1])){
+			if(print)
+				System.out.println("Top Corners Placed... " + currentalgorithm);
+			algorithm = algorithm + currentalgorithm;
+		}else{
+
+			System.out.println("Error: Top corners not placed, algorithm to this point: " + currentalgorithm);
+			cube.prettyPrint();
+		}
+
+	}
+
+	static int getOrtegaCornerState(Cube cube){
+
+		int state = 0;
+
+		if(cube.Bface[2][0]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 0));
+		}
+		if(cube.Bface[2][2]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 1));
+		}
+		if(cube.Rface[0][0]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 2));
+		}
+		if(cube.Rface[0][2]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 3));
+		}
+		if(cube.Fface[0][0]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 4));
+		}
+		if(cube.Fface[0][2]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 5));
+		}
+		if(cube.Lface[0][0]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 6));
+		}
+		if(cube.Lface[0][2]==cube.Uface[1][1]){
+			state = (int) (state + Math.pow(2, 7));
+		}
+
+
+
+		//	 System.out.println(state);
+
+
+
+		switch(state){
+		case 0: return 0;
+		case 72: return 1;//T
+		case 24: return 2;//L
+		case 41: return 3;//Mu
+		case 22: return 4;//Inverse Mu
+		case 120: return 5;//Pi
+		case 3: return 6;//U
+		case 51: return 7;
+
+
+		}
+
+		return -1;
+
+	}
+
+	static void OBC(Cube cube){
+		String currentalgorithm ="";
+		String moveselection = "";
+		boolean corners = false;
+		int shift = 0;
+		int move;
+
+		cube.performAlgorithm("XX", false);
+		currentalgorithm+="XX";
+
+		while(!corners){
+
+
+			if((cube.Uface[0][0]==cube.Uface[1][1])&&(cube.Uface[0][2]==cube.Uface[1][1])&&(cube.Uface[2][0]==cube.Uface[1][1])&&
+					(cube.Uface[2][2]==cube.Uface[1][1])){
+				corners=true;
+			}else{
+				move = getOrtegaCornerState(cube);
+				if(move==0){
+					corners = true;
+				}else{
+					if(move == -1){
+						if(shift==4){
+							System.out.println("Error: Bottom corners not placed, algorithm to this point: " + currentalgorithm);
+							cube.prettyPrint();
+							corners = true;
+						}else{
+							cube.performAlgorithm("Y", false);
+							currentalgorithm = currentalgorithm + 'Y';
+							shift++;
+						}
+
+					}else{
+
+
+						cube.performAlgorithm(OBCmoves[move],false);
+
+						moveselection += OBCmoves[move]+",";
+
+						currentalgorithm = currentalgorithm + OBCmoves[move];
+					}
+
+				}
+			}
+
+
+
+
+		}
+
+
+		if((cube.Uface[0][0]==cube.Uface[1][1])&&(cube.Uface[0][2]==cube.Uface[1][1])&&(cube.Uface[2][0]==cube.Uface[1][1])&&
+				(cube.Uface[2][2]==cube.Uface[1][1])){
+			if(print)
+				System.out.println("Bottom Corners Placed... " + currentalgorithm);
+			algorithm = algorithm + currentalgorithm;
+		}
+	}
+
+	static byte opposite(byte A){
+		if(A==0)
+			return 4;
+		if(A==4)
+			return 0;
+		if(A==1)
+			return 3;
+		if(A==3)
+			return 1;
+		if(A==2)
+			return 5;
+		if(A==5)
+			return 2;
+
+		return -1;
+	}
+
+	static boolean[] countPairs(Cube cube){
+		boolean[] Pairs = new boolean[8];
+
+		if(cube.Fface[0][0]==cube.Fface[0][2]){
+			Pairs[0]=true;
+			if(cube.Rface[0][0]==cube.Rface[0][2]){
+				Pairs[1]=true;
+				Pairs[2]=true;
+				Pairs[3]=true;
+			}
+		}else if(cube.Fface[0][0]==opposite(cube.Fface[0][2])){
+			if(cube.Rface[0][0]!=opposite(cube.Rface[0][2])){
+				Pairs[2]=true;
+			}
+
+		}else if(cube.Rface[0][0]==opposite(cube.Rface[0][2])){
+			Pairs[3]=true;
+		}else if(cube.Rface[0][0]==cube.Rface[0][2]){
+			Pairs[1]=true;
+		}
+
+		cube.performAlgorithm("XX", false);
+
+		if(cube.Fface[0][0]==cube.Fface[0][2]){
+			Pairs[6]=true;
+			if(cube.Rface[0][0]==cube.Rface[0][2]){
+				Pairs[5]=true;
+				Pairs[4]=true;
+				Pairs[7]=true;
+			}
+		}else if(cube.Fface[0][0]==opposite(cube.Fface[0][2])){
+			if(cube.Rface[0][0]!=opposite(cube.Rface[0][2])){
+				Pairs[4]=true;
+			}
+
+		}else if(cube.Rface[0][0]==opposite(cube.Rface[0][2])){
+			Pairs[7]=true;
+		}else if(cube.Rface[0][0]==cube.Rface[0][2]){
+			Pairs[5]=true;
+		}
+
+		cube.performAlgorithm("XX", false);
+
+
+		return Pairs;
+	}
+
+	static int numOrtegaPairs(boolean[] Pairs){
+		int state = 0;
+
+		for(int i = 0;i<Pairs.length;i++){
+			if(Pairs[i])
+				state = (int) (state + Math.pow(2, i));
+		}
+
+		//System.out.println(state);
+
+		switch(state){
+		case 0: return 0;
+		case 64: return 1;
+		case 4: return 2;
+		case 68: return 3;
+		case 240: return 4;
+		case 244: return 5;
+		case 255: return 6;
+
+		}
+
+		return -1;
+	}
+
+	static int numTLayerPairs(boolean[] Pairs){
+		int num =0;
+
+		for(int i = 0;i<4;i++){
+			if(Pairs[i])
+				num++;
+		}
+
+		return num;
+	}
+
+	static int numBLayerPairs(boolean[] Pairs){
+		int num =0;
+
+		for(int i = 4;i<Pairs.length;i++){
+			if(Pairs[i])
+				num++;
+		}
+
+		return num;
+	}
+
+	protected static String[] PACmoves = {"RRFFRR","RuFUUfUr","rUrBBRuR","RRUFFUURRURR","FFuRurUFFURUr","RuRFFrURFFRR"};
+
+	static void PAC (Cube cube){
+		String currentalgorithm ="";
+		String moveselection = "";
+		boolean Pairs[] = countPairs(cube);
+		int numPairs = numOrtegaPairs(Pairs);
+		int loop = 0;
+
+
+		while(numPairs!=6){
+
+
+			if(numPairs!=-1){
+				cube.performAlgorithm(PACmoves[numPairs], false);
+				currentalgorithm+=PACmoves[numPairs];
+				moveselection+=numPairs+",";
+			}else{
+
+				if(numTLayerPairs(Pairs)==4){
+					cube.performAlgorithm("XX", false);
+					currentalgorithm+="XX";
+				}else if(numTLayerPairs(Pairs)==1){
+					while(!Pairs[2]){
+						cube.performAlgorithm("Y", false);
+						currentalgorithm+="Y";
+						Pairs = countPairs(cube);
+					}
+					if(numBLayerPairs(Pairs)==1){
+						while(!Pairs[6]){
+							cube.performAlgorithm("D", false);
+							currentalgorithm+="D";
+							Pairs = countPairs(cube);
+						}
+					}
+				}else if(numTLayerPairs(Pairs)==0){
+					while(!Pairs[6]){
+						cube.performAlgorithm("Y", false);
+						currentalgorithm+="Y";
+						Pairs = countPairs(cube);
+					}
+				}
+
+			}
+
+			loop++;
+
+			//System.out.println("Loop: "+loop);
+			Pairs = countPairs(cube);
+			numPairs = numOrtegaPairs(Pairs);
+
+			if(loop > 10){
+				System.out.println("Error: Corners not placed, algorithm to this point: " + currentalgorithm);
+				cube.prettyPrint();
+				numPairs =6;
+			}
+
+		}
+
+		if((cube.Uface[0][0]==cube.Uface[1][1])&&(cube.Uface[0][2]==cube.Uface[1][1])&&(cube.Uface[2][0]==cube.Uface[1][1])&&(cube.Uface[2][2]==cube.Uface[1][1])&&
+				(cube.Dface[0][0]==cube.Dface[1][1])&&(cube.Dface[0][2]==cube.Dface[1][1])&&(cube.Dface[2][0]==cube.Dface[1][1])&&(cube.Dface[2][2]==cube.Dface[1][1])&&
+				(cube.Fface[0][2]==cube.Fface[0][0])&&(cube.Rface[0][0]==cube.Rface[0][2])&&(cube.Lface[0][0]==cube.Lface[0][2])&&(cube.Bface[2][0]==cube.Bface[2][2])&&
+				(cube.Fface[2][0]==cube.Fface[2][2])&&(cube.Rface[2][0]==cube.Rface[2][2])&&(cube.Lface[2][0]==cube.Lface[2][2])&&(cube.Bface[0][0]==cube.Bface[0][2])){
+			if(print)
+				System.out.println("All Corners Placed... " + currentalgorithm);
+			cube.performAlgorithm("Z", false);
+			currentalgorithm+="Z";
+			algorithm = algorithm + currentalgorithm;
+		}
+
+	}
+
+	static int convertLEdgePos(int Edge){
+
+		switch(Edge){
+		case 4 : return 0;
+		case 5 : return 1;
+		case 9 : return 2;
+		case 8 : return 3;
+		case 11 : return 4;
+		case 0 : return 5;
+		case 1 : return 5;
+		case 2 : return 6;
+		case 3 : return 6;
+		case 6 : return 11;
+		case 7 : return 11;
+		case 12: return 9;
+		case 13: return 9;
+		case 14: return 8;
+		case 15: return 8;
+		case 16: return 10;
+		case 17: return 10;
+		case 18: return 11;
+		case 19: return 11;
+		case 20: return 11;
+		case 21: return 11;
+		case 22: return 7;
+		case 23: return 7;
+		case 10: return 18;
+		}
+
+
+		return -1;
+	}
+
+	static int convertExtraLEdgePos(int Edge){
+
+		switch(Edge){
+		case 6: return 12;
+		case 7: return 13;
+		case 18:return 14;
+		case 19:return 15;
+		case 20:return 16;
+		case 21:return 17;
+		}
+
+
+		return -1;
+	}
+
+	static void OrtegaEdges (Cube cube){
+		LEdges(cube);
+		REdges(cube);
+		LLEdge(cube);
+	}
+
+	protected static String[] LEdgemoves = {"umU","UMMu","uMU","UMUUmU","uMUUMMu","M","R","m","r","MM","RR","X","FMMfUMu","FMMfuMMU","DmdMumU","DmdMUMMu","BmbUMMu","BmbuMU",""};
+
+
+	static void LEdges (Cube cube){
+		int numLedge = 0;
+		int move = -1;
+		int edgePos = -1;
+		int loop = 0;
+
+		String currentalgorithm = "";
+		String moveselection = "";
+
+		while(numLedge != 3){
+
+			if(cube.Uface[0][0]==cube.Uface[1][0]&&cube.Lface[0][0]==cube.Lface[0][1]){
+				numLedge++;
+				cube.performAlgorithm("X", false);
+				currentalgorithm+="X";	
+
+
+			}else{
+
+				edgePos = getEdgePos(cube,cube.Uface[0][0],cube.Lface[1][1]);
+
+				move = convertLEdgePos(edgePos);
+
+				if(move == 11){
+					move = convertExtraLEdgePos(edgePos);
+				}
+
+				if(move==-1){
+					System.out.println(edgePos);
+				}
+
+
+
+				cube.performAlgorithm(LEdgemoves[move], false);
+
+				currentalgorithm+=LEdgemoves[move];
+				moveselection+=move+",";
+
+			}
+
+			loop++;
+			if(loop>20){
+				System.out.println("Error: LEdges not placed, algorithm to this point: " + currentalgorithm);
+				System.out.println("Move Selection: "+moveselection);
+				cube.prettyPrint();
+				numLedge = 3;
+			}
+
+		}
+
+		int loop2 = 0;
+
+		while((cube.Lface[0][0]==cube.Lface[0][1])&&loop2<4){
+
+			cube.performAlgorithm("X", false);
+			currentalgorithm+="X";
+			loop2++;
+		}
+
+		if((cube.Fface[0][0]==cube.Fface[1][0])&&(cube.Fface[0][0]==cube.Fface[2][0])&&(cube.Dface[0][0]==cube.Dface[1][0])&&(cube.Dface[0][0]==cube.Dface[2][0])&&
+				(cube.Bface[0][0]==cube.Bface[1][0])&&(cube.Bface[0][0]==cube.Bface[2][0])){
+			if(print)
+				System.out.println("3 LEdges Placed... " + currentalgorithm);
+			algorithm = algorithm + currentalgorithm;
+		}
+
+	}
+
+	static int convertREdgePos(int Edge){
+
+		switch(Edge){
+		case 4 : return 0;
+		case 5 : return 1;
+		case 11: return 2;
+		case 10: return 3;
+		case 9 : return 4;
+		case 0 : return 5;
+		case 1 : return 5;
+		case 2 : return 6;
+		case 3 : return 6;
+		case 12: return 7;
+		case 13: return 7;
+		case 14: return 6;
+		case 15: return 6;
+		case 16: return 6;
+		case 17: return 6;
+		case 22: return 8;
+		case 23: return 8;
+		case 8 : return 12;
+		}
+
+
+		return -1;
+	}
+
+	static int convertExtraREdgePos(int Edge){
+
+		switch(Edge){
+		case 2: return 9;
+		case 3: return 9;
+		case 14:return 10;
+		case 15:return 10;
+		case 16:return 11;
+		case 17:return 11;
+		}
+
+
+		return -1;
+	}
+
+	protected static String[] REdgemoves = {"Umu","uMMU","UMu","uMUUmu","UMUUMMU","M","R","MM","m","RumUr","rumUR","RRumURR",""};
+
+	static void REdges (Cube cube){
+		int numRedge = 0;
+		int move = -1;
+		int edgePos = -1;
+		int loop = 0;
+
+		String currentalgorithm = "";
+		String moveselection = "";
+
+		while(numRedge != 4){
+
+
+			if(cube.Uface[0][2]==cube.Uface[1][2]&&cube.Rface[0][0]==cube.Rface[0][1]){
+				numRedge++;
+				cube.performAlgorithm("R", false);
+				currentalgorithm+="R";	
+
+			}else{
+
+				edgePos = getEdgePos(cube,cube.Uface[0][2],cube.Rface[1][1]);
+
+				move = convertREdgePos(edgePos);
+
+				if(move == 6){
+					move = convertExtraREdgePos(edgePos);
+				}
+
+
+				if(move==-1){
+					System.out.println(edgePos);
+				}
+
+
+
+				cube.performAlgorithm(REdgemoves[move], false);
+
+
+				currentalgorithm+=REdgemoves[move];
+				moveselection+=move+",";
+
+			}
+
+			loop++;
+			if(loop>15){
+				System.out.println("Error: REdges not placed, algorithm to this point: " + currentalgorithm);
+				System.out.println("Move Selection: "+moveselection);
+				cube.prettyPrint();
+				numRedge = 4;
+			}
+
+		}
+
+
+
+		if((cube.Fface[0][2]==cube.Fface[1][2])&&(cube.Fface[0][2]==cube.Fface[2][2])&&(cube.Dface[0][2]==cube.Dface[1][2])&&(cube.Dface[0][2]==cube.Dface[2][2])&&
+				(cube.Bface[0][2]==cube.Bface[1][2])&&(cube.Bface[0][2]==cube.Bface[2][2])&&(cube.Uface[0][2]==cube.Uface[1][2])&&(cube.Uface[0][2]==cube.Uface[2][2])){
+			if(print)
+				System.out.println("4 REdges Placed... " + currentalgorithm);
+			algorithm = algorithm + currentalgorithm;
+		}
+	}
+
+	protected static String[] LLEdgemoves = {"uMUUMu","UmUUmU","MuMUUMu","MMuMUUMu","muMUUMu","MUmUUmU","MMUmUUmU","mUmUUmU","","uMUUMumuMUUMu"};
+
+	static int convertLLEdgePos(int Edge){
+
+		switch(Edge){
+		case 5:return 0;
+		case 23:return 1;
+		case 0:return 2;
+		case 12:return 3;
+		case 22:return 4;
+		case 4:return 5;
+		case 1:return 6;
+		case 13:return 7;
+		case 10:return 8;
+		case 11:return 9;
+		}
+
+
+		return -1;
+	}
+
+	static void LLEdge (Cube cube){
+		String currentalgorithm = "";
+		int edgePos = -1;
+		int move = -1;
+
+		edgePos = getEdgePos(cube,cube.Uface[0][0],cube.Lface[1][1]); 
+
+		move = convertLLEdgePos(edgePos);
+
+		
+		cube.performAlgorithm(LLEdgemoves[move], false);
+		currentalgorithm+=LLEdgemoves[move];
+		
+		if(cube.Lface[0][0]==cube.Lface[0][1]&&cube.Uface[2][0]==cube.Uface[1][0]){
+			if(print)
+				System.out.println("Last LEdge Placed... " + currentalgorithm);
+			algorithm = algorithm + currentalgorithm;
+		}else{
+			System.out.println("Error: REdges not placed, algorithm to this point: " + currentalgorithm);
+			
+			cube.prettyPrint();
+			
+		}
+
+	}
+
+	protected static String[] midgeFlipMoves = {"","mUmUmUUMUMUMUU","X","XX","x"};
+	
+	
+	static void OrtegaMidges(Cube cube){
+		FlipMidges(cube);
+		PlaceMidges(cube);
+	}
+	
+	static int convertMidgeState(int state){
+
+		switch(state){
+		case 0:return 0;
+		case 3:return 1;
+		case 6:return 2;
+		case 12:return 3;
+		case 9:return 4;
+		case 15:return 1;
+		case 5:return 1;
+		
+		}
+
+
+		return 4;
+	}
+
+	static int getMidgeState(Cube cube){
+		int state = 0;
+		if(cube.Uface[0][1]!=cube.Uface[1][1])
+			if(cube.Uface[0][1]!=opposite(cube.Uface[1][1]))
+				state = (int) (state + Math.pow(2, 0));
+		if(cube.Uface[2][1]!=cube.Uface[1][1])
+			if(cube.Uface[2][1]!=opposite(cube.Uface[1][1]))
+				state = (int) (state + Math.pow(2, 1));
+		if(cube.Fface[2][1]!=cube.Fface[1][1])
+			if(cube.Fface[2][1]!=opposite(cube.Fface[1][1]))
+				state = (int) (state + Math.pow(2, 2));
+		if(cube.Dface[2][1]!=cube.Dface[1][1])
+			if(cube.Dface[2][1]!=opposite(cube.Dface[1][1]))
+				state = (int) (state + Math.pow(2, 3));
+		
+		return state;
+	}
+	static void FlipMidges (Cube cube){
+		int state = -1 ;
+		String currentalgorithm = "";
+		String moveselection = "";
+		int move = -1;
+		int loop = 0;
+		
+		while(state != 0){
+			state = getMidgeState(cube);
+			move = convertMidgeState(state);
+			
+			cube.performAlgorithm(midgeFlipMoves[move], false);
+			currentalgorithm += midgeFlipMoves[move];
+			moveselection+=move+",";
+			
+			loop++;
+			if(loop>12){
+				System.out.println("Error: Midges not flipped, algorithm to this point: " + currentalgorithm);
+				System.out.println("Move Selection: "+moveselection);
+				cube.prettyPrint();
+				
+				state = 0;
+			}
+		}
+		state = getMidgeState(cube);
+		if(state==0){
+			if(print)
+				System.out.println("Midges Flipped... " + currentalgorithm);
+			algorithm = algorithm + currentalgorithm;
+		}
+	}
+
+	protected static String[] midgePlaceMoves = {"","UUMUUm","UUmUUM","UUMMUUMM","ZmmzMZmmzM","X"};
+	
+	static int getMidgePlaceState(Cube cube){
+		if(cube.Uface[0][1]==cube.Uface[1][1]&&cube.Uface[2][1]==cube.Uface[1][1]&&cube.Fface[0][1]==cube.Fface[1][1]&&cube.Bface[2][1]==cube.Bface[1][1]){
+			return 0;
+		}
+		if(cube.Uface[0][1]==cube.Uface[1][1]&&cube.Uface[2][1]==opposite(cube.Uface[1][1])&&cube.Fface[0][1]==opposite(cube.Fface[1][1])&&cube.Bface[2][1]==opposite(cube.Bface[1][1])){
+			return 1;
+		}
+		if(cube.Uface[0][1]==opposite(cube.Uface[1][1])&&cube.Uface[2][1]==cube.Uface[1][1]&&cube.Fface[0][1]==opposite(cube.Fface[1][1])&&cube.Bface[2][1]==opposite(cube.Bface[1][1])){
+			return 2;
+		}
+		if(cube.Uface[0][1]==cube.Uface[1][1]&&cube.Uface[2][1]==cube.Uface[1][1]&&cube.Fface[0][1]==opposite(cube.Fface[1][1])&&cube.Bface[2][1]==opposite(cube.Bface[1][1])){
+			return 3;
+		}
+		if(cube.Uface[0][1]==opposite(cube.Uface[1][1])&&cube.Uface[2][1]==opposite(cube.Uface[1][1])&&cube.Fface[0][1]==opposite(cube.Fface[1][1])&&cube.Bface[2][1]==opposite(cube.Bface[1][1])){
+			return 4;
+		}
+		
+		return 5;
+	}
+	static void PlaceMidges (Cube cube){
+		int state = -1;
+		String currentalgorithm = "";
+		String moveselection = "";
+		int loop = 0;
+		
+		while(state != 0){
+			state = getMidgePlaceState(cube);
+			
+			cube.performAlgorithm(midgePlaceMoves[state], false);
+			currentalgorithm += midgePlaceMoves[state];
+			moveselection += state+",";
+			loop++;
+			if(loop>10){
+				System.out.println("Error: Midges not placed, algorithm to this point: " + currentalgorithm);
+				System.out.println("Move Selection: "+moveselection);
+				cube.prettyPrint();
+				
+				state = 0;
+			}
+			
+		}
+		state = getMidgePlaceState(cube);
+		if(state==0){
+			if(print)
+				System.out.println("Midges Placed... " + currentalgorithm);
+			algorithm = algorithm + currentalgorithm;
+		}
+	}
+	
+	static void OrtegaFinalAdjustments(Cube cube){
+		String currentalgorithm = "";
+		while(cube.Fface[0][0]!=cube.Fface[1][1]){
+			cube.performAlgorithm("L", false);
+			currentalgorithm+="L";
+		}
+		while(cube.Fface[0][2]!=cube.Fface[1][1]){
+			cube.performAlgorithm("R", false);
+			currentalgorithm+="R";
+		}
+		if(cube.solved())
+			algorithm +=currentalgorithm;
+		else{
+			System.out.println("Error");
+			cube.prettyPrint();
+		}
+	}
+
+	static void Ortega(Cube cube){
+		algorithm = "";
+		if(print)
+			System.out.println("Solving...");
+
+		OTC(cube);
+		OBC(cube);
+		PAC(cube);
+		OrtegaEdges(cube);
+		OrtegaMidges(cube);
+		OrtegaFinalAdjustments(cube);
+		if(print)
+			System.out.println("Solution algorithm: "+algorithm);
+
 	}
 
 }
