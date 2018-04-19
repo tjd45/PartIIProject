@@ -1,17 +1,22 @@
 package uk.ac.cam.tjd45.partiiproj;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ExperimentAnalysis {
 	protected static String[][] Entrant = new String[20][];
-	protected static String[][] Scrambles = new String[13][];
+	protected static String[][] Scrambles = new String[14][];
 	protected static int[] numSolved = new int[10];
 	protected static int[] numAttempted = new int[10];
 	protected static int[] numSolvedNeural = new int[10];
 	protected static int[] numAttemptedNeural = new int[10];
+	protected static int[] discrepHum = new int[10];
+	protected static int[] discrepNN = new int[10];
+	
 
 
 	public static double round(double value, int places) {
@@ -120,7 +125,7 @@ public class ExperimentAnalysis {
 		}
 	}
 
-	static void testNeural(String model, int maxMoves, boolean backtrackallowed){
+	static void testNeural(String model, int maxMoves, boolean backtrackallowed,boolean outputtofile){
 		if(model.length()<1){
 			model = Solutions.defaultModel;
 		}
@@ -140,10 +145,77 @@ public class ExperimentAnalysis {
 
 				if(cube.solved()){
 					numSolvedNeural[scramIndex]++;
-
+					if(Entrant[i][6+j].equals("n")){
+						discrepNN[scramIndex]++;
+					}
+					
+				}else if(Entrant[i][6+j].equals("y")){
+					discrepHum[scramIndex]++;
 				}
+				
 				numAttemptedNeural[scramIndex]++;
 
+			}
+		}
+		
+		if(outputtofile){
+			PrintWriter pw;
+			try {
+				pw = new PrintWriter(new File(model+"ExperimentAnalysis.csv"));
+			
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("X-moves,");
+
+			for(int i = 0;i<10;i++){
+				sb.append(i+1+",");
+			}
+
+			sb.append("\n");
+
+			sb.append("Percentage Solved Human,");
+
+			sb.append("100,");
+			for(int i = 0;i<9;i++){
+				sb.append(round(((double)numSolved[i]/(double)numAttempted[i])*100,2));
+				sb.append(",");
+			}
+
+			sb.append("\n");
+
+			sb.append("Percentage Solved Neural,");
+
+			sb.append("100,");
+			for(int i = 0;i<9;i++){
+				sb.append(round(((double)numSolvedNeural[i]/(double)numAttemptedNeural[i])*100,2));
+				sb.append(",");
+			}
+			
+			sb.append("\n");
+
+			sb.append("Discrepancy for Neural,");
+
+			sb.append("0,");
+			for(int i = 0;i<9;i++){
+				sb.append(discrepNN[i]);
+				sb.append(",");
+			}
+			
+			sb.append("\n");
+
+			sb.append("Discrepancy for Humans,");
+
+			sb.append("0,");
+			for(int i = 0;i<9;i++){
+				sb.append(discrepHum[i]);
+				sb.append(",");
+			}
+			pw.write(sb.toString());
+			pw.close();
+			
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
@@ -152,7 +224,7 @@ public class ExperimentAnalysis {
 		readCSV("ExperimentResults");
 		getAssociatedScrambles("ControlledExperimentScrambles");
 		getOveralls();
-		testNeural("Model_80",100,true);
+		testNeural("Model_160",100,true,true);
 
 
 
@@ -161,6 +233,7 @@ public class ExperimentAnalysis {
 			System.out.println("Human solved: "+numSolved[i]+": "+round(((double)numSolved[i]/(double)numAttempted[i])*100,2)+"% Neural net solved: "+numSolvedNeural[i]+": "+round(((double)numSolvedNeural[i]/(double)numAttemptedNeural[i])*100,2)+"%");
 		}
 
+		
 
 	}
 }

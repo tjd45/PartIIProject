@@ -19,6 +19,10 @@ public class SolutionsAnalytics {
 		String[] tcorOrMoves = {};
 		
 		int[][] CFOPlengths = new int[7][];
+		
+		int[][] Fridrichlengths = new int[4][];
+		
+		int[][] Ortegalengths = new int[6][];
 
 		
 		int longestCFOPcross = 0;
@@ -152,6 +156,12 @@ public class SolutionsAnalytics {
 			}
 		}
 		Falg += s1 + s1 + s1 + s1;
+		
+		Fridrichlengths[0] = new int[s1.length()+1];
+
+		for(String s : Solutions.crossmoves){
+			Fridrichlengths[0][s.length()]++;
+		}
 
 		s1 ="";
 		for(String[] As : Solutions.F2lmoves){
@@ -164,6 +174,20 @@ public class SolutionsAnalytics {
 
 		}
 		Falg += s1 + s1 + s1 + s1 + "luLUluLUluLUluLU";
+		
+		Fridrichlengths[1] = new int[s1.length()+1];
+
+		
+		for(String[] As : Solutions.F2lmoves){
+			for(String s : As){
+				
+					Fridrichlengths[1][s.length()]++;
+
+				
+			}
+
+		}
+		
 
 		s1 = "";
 		for(String s : Solutions.OLLmoves){
@@ -172,6 +196,12 @@ public class SolutionsAnalytics {
 			}
 		}
 		Falg += s1;
+		
+		Fridrichlengths[2] = new int[s1.length()+1];
+		
+		for(String s : Solutions.OLLmoves){
+			Fridrichlengths[2][s.length()]++;
+		}
 
 		s1 = "";
 		for(String s : Solutions.PLLmoves){
@@ -180,17 +210,141 @@ public class SolutionsAnalytics {
 			}
 		}
 		Falg += s1;
+		
+		Fridrichlengths[3] = new int[s1.length()+1];
+		
+		for(String s : Solutions.PLLmoves){
+			Fridrichlengths[3][s.length()]++;
+		}
+		
+		String Oalg = "";
+		s1="";
+		for(String s : Solutions.OTCmoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		Oalg += s1 + s1 + s1 + s1;
+		
+		Ortegalengths[0] = new int[s1.length()+1];
 
+		for(String s : Solutions.OTCmoves){
+			Ortegalengths[0][s.length()]++;
+		}
+
+		s1="";
+		for(String s : Solutions.OBCmoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		Oalg += s1 + s1 + s1 + s1;
+		
+		Ortegalengths[1] = new int[s1.length()+1];
+
+		for(String s : Solutions.OBCmoves){
+			Ortegalengths[1][s.length()]++;
+		}
+		
+
+		s1 = "";
+		for(String s : Solutions.PACmoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		Falg += s1+s1+s1;
+		
+		Ortegalengths[2] = new int[s1.length()+1];
+		
+		for(String s : Solutions.PACmoves){
+			Ortegalengths[2][s.length()]++;
+		}
+
+		s1 = "";
+		for(String s : Solutions.LEdgemoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		for(String s : Solutions.REdgemoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		for(String s : Solutions.LLEdgemoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		Falg += s1+s1+s1+s1+s1+s1+s1+s1+s1;
+		
+		Ortegalengths[3] = new int[s1.length()+1];
+		
+		for(String s : Solutions.LEdgemoves){
+			Ortegalengths[3][s.length()]++;
+		}
+		for(String s : Solutions.REdgemoves){
+			Ortegalengths[3][s.length()]++;
+		}
+		for(String s : Solutions.LLEdgemoves){
+			Ortegalengths[3][s.length()]++;
+		}
+		
+		s1="";
+		for(String s : Solutions.midgeFlipMoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		for(String s : Solutions.midgePlaceMoves){
+			if (s.length() > s1.length()){
+				s1 = s;	
+			}
+		}
+		Oalg += s1 + s1 + s1 + s1 +s1;
+		
+		Ortegalengths[4] = new int[s1.length()+1];
+
+		for(String s : Solutions.midgeFlipMoves){
+			Ortegalengths[4][s.length()]++;
+		}
+		for(String s : Solutions.midgePlaceMoves){
+			Ortegalengths[4][s.length()]++;
+		}
+
+		s1 ="R";
+		Oalg += s1+s1+s1+s1;
+		Ortegalengths[5] = new int[2];
+		Ortegalengths[5][1]+=2;
+
+//		for(int i = 0; i<6;i++){
+//
+//
+//			for(int j = 0; j<CFOPlengths[i].length;j++){
+//				System.out.println(j +" moves: "+ CFOPlengths[i][j]);
+//			}
+//		}
+		
+//		for(int i = 0; i<4;i++){
+//
+//
+//			for(int j = 0; j<Fridrichlengths[i].length;j++){
+//				System.out.println(j +" moves: "+ Fridrichlengths[i][j]);
+//			}
+//		}
+		
 		for(int i = 0; i<6;i++){
 
 
-			for(int j = 0; j<CFOPlengths[i].length;j++){
-				System.out.println(j +" moves: "+ CFOPlengths[i][j]);
+			for(int j = 0; j<Ortegalengths[i].length;j++){
+				System.out.println(j +" moves: "+ Ortegalengths[i][j]);
 			}
 		}
 
 		System.out.println("Length of longest Fridrich algorithm: "+ Falg.length());
 		System.out.println("Length of longest CFOP algorithm: " + alg.length());
+		System.out.println("Length of longest Ortega algorithm: " + Oalg.length());
 
 	}
 

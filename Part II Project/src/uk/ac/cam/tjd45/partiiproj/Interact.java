@@ -4,6 +4,26 @@ import java.util.Scanner;
 public class Interact {
 
 	public static void main(String[] args){
+		//Initialise the cube
+//		Cube cube = new Cube();
+//		//Display the inital solved state of the cube
+//		cube.prettyPrint();
+//		
+//		//Define a new scanner to read from System.in
+//		Scanner reader = new Scanner(System.in); 
+//		//Define a string to hold the current input
+//		String input = reader.nextLine();
+//		
+//		//Loop until the user quits
+//		while(!input.equals("q")){
+//			//Perform the inputted move on the cube with the print variable set to true
+//			cube.performAlgorithm(input, true);
+//			//get the next move when the user is ready
+//			input = reader.nextLine();
+//		}; 
+//		
+		//reader.close();
+		
 		//Cube cube = new Cube();
 		//Cube cube = new Cube("rrRLDdFdlU");
 
@@ -118,20 +138,33 @@ public class Interact {
 		//		System.out.println(sol.length()+":"+sol);
 		//		}
 
-		//		Cube cube = new Cube();
-		//		cube.experimentScrambles(13);
+       Cube cube = new Cube();
+//         cube.prettyPrint();
+//         cube.scramble(10, false);
+//         cube.prettyPrint();
+         
+         //Solutions.solve(cube, "Ortega", true);
+	cube.experimentScrambles(15);
 
-		for(int i = 0; i< 10000; i++){
-			Cube cube = new Cube();
-
-			//System.out.println(cube.scramble(10, false));
-			cube.scramble(10, false);
-
-			Solutions.solve(cube, "Ortega", false);
-
-			//cube.prettyPrint();
-
-		}
+		//Cube cube = new Cube();
+//		cube.scramble(50, false);
+//		Solutions.solve(cube, "Ortega", false);
+		
+		//cube.prettyPrint();
+//		Cube cube = new Cube();
+//		cube.analyseScramble(20, false);
+//		Solutions.stepSolve(cube, "CFOP", false);
+//		for(int i = 0; i< 10000; i++){
+//			Cube cube = new Cube();
+//
+//			//System.out.println(cube.scramble(10, false));
+//			cube.scramble(10, false);
+//
+//			Solutions.solve(cube, "Ortega", false);
+//
+//			//cube.prettyPrint();
+//
+//		}
 
 
 

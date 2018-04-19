@@ -381,15 +381,22 @@ public class Cube{
 	}
 
 	void performAlgorithm(String alg, boolean p){
-		moveNo=0;
+		
+		//Split the provided algorithm string into a character array
 		char[] move = alg.toCharArray();
+		//Set the global print variable to the value passed to the function (by default global print is true)
 		print = p;
+		
+		//loop over the algorithm string
 		for(int i = 0;i<move.length;i++){
-			moveNo++;
+			//this string variable was used when debugging
 			lastMove=move[i];
+			
+			//calls the turn function which mutates the cube faces depending on the passed character
 			turn(move[i]);
 		}
-		moveNo=0;
+		
+		//reset print to true
 		print = true;
 	}
 

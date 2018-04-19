@@ -148,21 +148,27 @@ public class CubeSimulator {
 						solution = Solutions.attemptdoubleBackNeuralSolve(cube2,"",100,1,false);
 						
 					}else{
-						solution = Solutions.solve(cube2,"Ortega",false);
+						
+						solution = Solutions.longsolve(cube2,"Ortega",false);
+						
 					}
 
+					//split the solution algorithm into individual moves
 					final String[] moves = solution.split("(?!^)");
-
+					//initialise counter
 					counter = 0;
 
 
-
+					//loop to update the display every 100ms
 					Display.getDefault().timerExec(100, new Runnable() {
 						@Override
 						public void run(){
+							//checks that the number of moves performed is less than the length of the algorithm
 							if(counter<moves.length){
+								//performs a move on the cube
 								cube.performAlgorithm(moves[counter], false);
 							}
+							//updates the screen
 							canvas.redraw();
 
 							if(counter!=moves.length){

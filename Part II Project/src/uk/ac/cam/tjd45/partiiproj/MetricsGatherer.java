@@ -7,7 +7,7 @@ public class MetricsGatherer {
 
 	public static void main(String[] args){
 		int N = 10000;
-		String method = "Ortega";
+		String method = "CFOP";
 		long duration = 0;
 		
 		String algorithm = "";
@@ -23,7 +23,7 @@ public class MetricsGatherer {
 		int[] stepSolveLens = new int[8];
 		
 		
-		float[] averages = new float[40];
+		float[][] averages = new float[40][8];
 		int[] solveLens = new int[maxSolve];
 
 		PrintWriter pw,pw2;
@@ -87,7 +87,7 @@ public class MetricsGatherer {
 					
 					
 					sb.append(',');
-					sb.append(clength);
+					sb.append(clength[7]);
 					
 					
 
@@ -106,7 +106,10 @@ public class MetricsGatherer {
 				}
 				sb.append('\n');
 				sb2.append('\n');
-				averages[i]=(float)rlength[7]/N;
+				for(int k = 0; k<8; k++){
+					averages[i][k]=(float)rlength[k]/N;
+				}
+				
 
 			}
 			
@@ -122,13 +125,46 @@ public class MetricsGatherer {
 			e.printStackTrace();
 		}
 		for(int i=0;i<40;i++){
-			System.out.print(i+1+" moves: "+averages[i]);
+			System.out.print(i+1+" moves: "+averages[i][7]);
 			for(int j = 0; j<8; j++){
 				System.out.print(" O: "+numodd[i][j]+ " E: "+(N-numodd[i][j]));
 			}
 			System.out.println();
 		}
 
+		try {
+			PrintWriter pw3 = new PrintWriter(new File(method+"StepAverages.csv"));
+			
+			StringBuilder sb3 = new StringBuilder();
+			
+			sb3.append("Step:,");
+			for(int i = 0; i< 8; i++){
+				sb3.append((i+1)+",");
+			}
+			sb3.append("\n");
+			sb3.append("X-moves");
+			sb3.append("\n");
+			
+			for(int i = 0; i<40; i++){
+				sb3.append(i+1+",");
+				for(int j = 0; j<8; j++){
+					sb3.append(averages[i][j]);
+					sb3.append(",");
+				}
+				sb3.append("\n");
+			}
+			
+			pw3.write(sb3.toString());
+			pw3.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		
+		
 		System.out.println(duration);
 
 	}

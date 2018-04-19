@@ -83,7 +83,7 @@ public class StepAnalyser {
 		java.util.Arrays.fill(Solutions.counter6, 0);
 		java.util.Arrays.fill(Solutions.counter7, 0);
 
-		if(method == "CFOP"){
+		if(method.equals("CFOP")){
 			counter = new int[7][];
 			loopcounter = new int[7][];
 
@@ -129,8 +129,92 @@ public class StepAnalyser {
 			counter[4] = Solutions.counter5;
 			counter[5] = Solutions.counter6;
 			counter[6] = Solutions.counter7;
-		}
+		}else if(method.equals("Fridrich") ){
+			counter = new int[4][];
+		
+			loopcounter = new int[4][];
 
+		
+			loopcounter[0] = new int[12];
+	
+			loopcounter[1] = new int[8];
+
+			loopcounter[2] = new int[5];
+
+			loopcounter[3] = new int[3];
+	
+		
+
+			for(int i = 0; i<N; i++){
+				
+				cube = new Cube();
+				cube.scramble(S, false);
+				Solutions.FBcross(cube);
+				loopcounter[0][Solutions.loopcounter1]++;
+				Solutions.FF2l(cube);
+				loopcounter[1][Solutions.loopcounter2]++;
+				Solutions.FOLL(cube);
+				loopcounter[2][Solutions.loopcounter3]++;
+				Solutions.FPLL(cube);
+				loopcounter[3][Solutions.loopcounter4]++;
+				
+
+			}
+
+			counter[0] = new int[1];
+			counter[1] = new int[1];
+			counter[2] = new int[1];
+			counter[3] = new int[1];
+		
+		}else if(method.equals("Ortega") ){
+			counter = new int[6][];
+		
+			loopcounter = new int[6][];
+
+		
+			loopcounter[0] = new int[12];
+	
+			loopcounter[1] = new int[12];
+
+			loopcounter[2] = new int[12];
+
+			loopcounter[3] = new int[25];
+			
+			loopcounter[4] = new int[12];
+			
+			loopcounter[5] = new int[12];
+	
+		
+
+			for(int i = 0; i<N; i++){
+				
+				cube = new Cube();
+				cube.scramble(S, false);
+				Solutions.OTC(cube);
+				loopcounter[0][Solutions.loopcounter1]++;
+				Solutions.OBC(cube);
+				loopcounter[1][Solutions.loopcounter2]++;
+				Solutions.PAC(cube);
+				loopcounter[2][Solutions.loopcounter3]++;
+				Solutions.OrtegaEdges(cube);
+				loopcounter[3][Solutions.loopcounter4]++;
+				Solutions.OrtegaMidges(cube);
+				loopcounter[4][Solutions.loopcounter5]++;
+				Solutions.OrtegaFinalAdjustments(cube);
+				loopcounter[5][Solutions.loopcounter6]++;
+				
+
+			}
+
+			counter[0] = new int[1];
+			counter[1] = new int[1];
+			counter[2] = new int[1];
+			counter[3] = new int[1];
+			counter[4] = new int[1];
+			counter[5] = new int[1];
+		
+		}
+			
 		if(p){
 			printAnalysis();
 		}else{
@@ -139,7 +223,7 @@ public class StepAnalyser {
 	}
 
 	public static void main(String[] args){
-		analyse("CFOP",10000,19,false);
+		analyse("Ortega",10000,20,false);
 		//analyse("CFOP",10000,19,true);
 	}
 }

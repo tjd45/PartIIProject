@@ -12,12 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 import weka.classifiers.Classifier;
+import weka.classifiers.IterativeClassifier;
 import weka.classifiers.evaluation.Evaluation;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.misc.SerializedClassifier;
 
 public class NeuralNetwork {
 	static SerializedClassifier mlp;
+	
 	static char[] nextMove = {'F','f','R','r','L','l','U','u','D','d','B','b'};
 	static boolean initialised = false;
 	static String[] availableModels = {"Model_20","Model_40","Model_80","Model_10_10","Model_10_20"
@@ -179,6 +181,8 @@ public class NeuralNetwork {
 				}
 			}
 		}
+		
+		
 
 		if(output){
 			try {
@@ -221,6 +225,126 @@ public class NeuralNetwork {
 
 
 	}
+	
+	protected static void hybridAnalyse(String model, int N, int maxMoves, int backTrackIndex,int select, boolean output){
+		Cube cube = new Cube();
+		int counter = 0;
+		for(int i = 0; i< N;i++){
+			cube = new Cube();
+			cube.scramble(20, false);
+			
+			Solutions.attemptHybridSolve(cube, "CFOP", model, maxMoves, backTrackIndex, false);
+			
+			if(cube.solved()){
+				counter++;
+			}
+			
+			if(i%100==0){
+				System.out.println(i+" scrambles completed");
+			}
+		}
+		
+		
+		
+		System.out.println("Number of cubes out of "+N+" solved: "+counter);
+	}
+	
+	protected static void doubleAnalyse(String model, int N, int maxMoves, int backTrackIndex,int select, boolean output){
+		Cube cube = new Cube();
+		Cube cube2 = new Cube();
+		float[] solved = new float[10];
+		float[] solved2 = new float[10];
+		initialise(model);
+
+		for (int i = 0; i<10;i++){
+			for (int j = 0; j < N; j++){
+
+				cube = new Cube();
+				cube2 = new Cube();
+				
+				String scram = cube.scramble(i+1, false);
+				cube2.performAlgorithm(scram, false);
+
+				Solutions.attemptSimpleBackNeuralSolve(cube, model, maxMoves, backTrackIndex, false);
+				Solutions.attemptdoubleBackNeuralSolve(cube2, model, maxMoves, backTrackIndex, false);
+				
+				
+				if(cube.solved()){
+					solved[i]++;
+				}
+				
+				if(cube2.solved()){
+					solved2[i]++;
+				}
+
+			}
+			System.out.println((i+1)+" move scrambles complete");
+		}
+
+		if(output){
+			try {
+				PrintWriter pw = new PrintWriter(new File(model+"BTSPerformance1.csv"));
+				StringBuilder sb = new StringBuilder();
+
+				sb.append("X-moves,");
+
+				for(int i = 0;i<10;i++){
+					sb.append(i+1+",");
+				}
+
+				sb.append("\n");
+
+				sb.append("Percentage Solved,");
+
+				for(int i = 0;i<10;i++){
+					sb.append(solved[i]/((float) N)*100);
+					sb.append(",");
+				}
+
+				pw.write(sb.toString());
+				pw.close();
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				PrintWriter pw = new PrintWriter(new File(model+"DBPerformance2.csv"));
+				StringBuilder sb = new StringBuilder();
+
+				sb.append("X-moves,");
+
+				for(int i = 0;i<10;i++){
+					sb.append(i+1+",");
+				}
+
+				sb.append("\n");
+
+				sb.append("Percentage Solved,");
+
+				for(int i = 0;i<10;i++){
+					sb.append(solved2[i]/((float) N)*100);
+					sb.append(",");
+				}
+
+				pw.write(sb.toString());
+				pw.close();
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			for(int i = 0; i < 10; i++){
+				System.out.println((int)solved[i]+" "+(i+1)+" move scrambles solved: "+(solved[i]/(float) N)*100);
+			}
+		}
+
+
+	}
+	
+	
+	
 	public static void main(String[] args) throws Exception{
 
 
@@ -234,18 +358,40 @@ public class NeuralNetwork {
 		//			stepAnalyse(10000,i,true);
 		//			System.out.println(i+" move completed");
 		//		}
-		long startTime = System.nanoTime();
-		analyse("Model_80",10000,100,1,3,false);
-		long endTime = System.nanoTime();
-		long duration = (endTime-startTime)/1000000000;
-		System.out.println("Duration: "+duration);
-
+		
+//		//Simple
+//		long startTime = System.nanoTime();
+//		analyse("Model_160",10000,100,1,4,true);
+//		long endTime = System.nanoTime();
+//		long duration = (endTime-startTime)/1000000000;
+//		System.out.println("Duration: "+duration);
+//
+//		//BTS
 //		startTime = System.nanoTime();
-//		analyse("Model_80",10000,100,1,4,false);
+//		analyse("Model_160",10000,100,1,2,true);
 //		endTime = System.nanoTime();
 //		duration = (endTime-startTime)/1000000000;
 //		System.out.println("Duration: "+duration);
-
+//
+//		//Double
+//		startTime = System.nanoTime();
+//		analyse("Model_160",10000,100,1,3,true);
+//		endTime = System.nanoTime();
+//		duration = (endTime-startTime)/1000000000;
+//		System.out.println("Duration: "+duration);
+//		
+//		//Simple
+//		startTime = System.nanoTime();
+//		analyse("Model_160",10000,100,-1,1,true);
+//		endTime = System.nanoTime();
+//		duration = (endTime-startTime)/1000000000;
+//		System.out.println("Duration: "+duration);
+		
+		long startTime = System.nanoTime();
+		hybridAnalyse("Model_160",10000,100,1,4,true);
+		long endTime = System.nanoTime();
+		long duration = (endTime-startTime)/1000000000;
+		System.out.println("Duration: "+duration);
 
 
 
