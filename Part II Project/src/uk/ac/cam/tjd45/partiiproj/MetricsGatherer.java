@@ -5,9 +5,8 @@ import java.io.PrintWriter;
 
 public class MetricsGatherer {
 
-	public static void main(String[] args){
-		int N = 10000;
-		String method = "CFOP";
+	public static void gather(String method){
+		int N = 1000000;
 		long duration = 0;
 		
 		String algorithm = "";
@@ -26,6 +25,7 @@ public class MetricsGatherer {
 		float[][] averages = new float[40][8];
 		int[] solveLens = new int[maxSolve];
 
+		
 		PrintWriter pw,pw2;
 		try {
 			
@@ -52,10 +52,11 @@ public class MetricsGatherer {
 			
 			sb2.append('\n');
 			
-			long startTime = System.nanoTime();
+			long startTime = 0,endTime = 0;
 			
 			
-			for(int i=0;i<40;i++){
+			for(int i=0;i<20;i++){
+				startTime = System.nanoTime();
 				for(int k = 0; k<8;k++){
 					rlength[k]=0;	
 				}
@@ -67,7 +68,7 @@ public class MetricsGatherer {
 					cube = new Cube();
 					cube.scramble(i+1,false);
 
-					//algorithm = Solutions.solve(cube,"FridrichB",false);
+					algorithm = Solutions.solve(cube,"FridrichB",false);
 					stepSolveLens = Solutions.stepSolve(cube, method, false);
 					//clength = (algorithm.length());
 					//stepSolveLens[7] = Solutions.attemptNeuralSolve(cube,"", 200,false).length();
@@ -75,7 +76,7 @@ public class MetricsGatherer {
 						clength[k]=stepSolveLens[k];
 						if(clength[k] % 2 == 1){
 							
-							//System.out.println(k+" ,"+clength[k]);
+							System.out.println(k+" ,"+clength[k]);
 							numodd[i][k]++;
 						}
 					}
@@ -109,13 +110,14 @@ public class MetricsGatherer {
 				for(int k = 0; k<8; k++){
 					averages[i][k]=(float)rlength[k]/N;
 				}
-				
-
+				endTime = System.nanoTime();
+				duration = (endTime - startTime)/1000000000;
+				System.out.println(i+" move scrambles complete in "+duration+" seconds");
 			}
 			
-			long endTime = System.nanoTime();
+			
 
-			duration = (endTime - startTime);
+			
 			pw.write(sb.toString());
 			pw2.write(sb2.toString());
 			pw.close();
@@ -161,11 +163,63 @@ public class MetricsGatherer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+
 		
 		
 		
 		System.out.println(duration);
 
+	}
+	
+	static int getNumofIterations(String method,int scramble){
+		int iterations = 0;
+		int rlength = 0;
+		float average = 0;
+		
+		Cube cube;
+		
+		for(int i = 0;i<10000;i++){
+			cube = new Cube();
+			cube.scramble(scramble, false);
+			
+			rlength+=Solutions.solve(cube, method, false).length();
+			
+			iterations++;
+		}
+		
+		float firstav = (float)rlength/(float)iterations;
+		float secondav= 0;
+		
+		while(Math.abs(firstav-secondav)>1e-5){
+			
+			firstav = (float)rlength/(float)iterations;
+			for(int i = 0;i<1000;i++){
+				cube = new Cube();
+				cube.scramble(scramble, false);
+				
+				rlength+=Solutions.solve(cube, method, false).length();
+				
+				iterations++;
+			}
+			secondav = (float)rlength/(float)iterations;
+			
+		}
+		
+		
+		return iterations;
+	}
+	
+	public static void main(String[] args){
+//		for(int i = 1; i <21; i++){
+//			System.out.println(i+" move scramble: "+getNumofIterations("Fridrich",i));
+//		}
+		
+		System.out.println("CFOP");
+		gather("CFOP");
+		System.out.println("Fridrich");
+		gather("Fridrich");
+		System.out.println("Ortega");
+		gather("Ortega");
+		
 	}
 }

@@ -38,11 +38,17 @@ public class IterativeNeuralNetwork {
 
 		current.setClassIndex(current.numAttributes()-1);
 		
-		o = SerializationHelper.readAll("/Users/ThomasDavidson/Documents/Cambridge/Part II Project/Machine Learning Model Results/Ten Move Tests/Models/model_80.model");
+		Evaluation eval = new Evaluation(current);
+		
+		o = SerializationHelper.readAll("/Users/ThomasDavidson/Documents/Cambridge/Part II Project/Machine Learning Model Results/Ten Move Tests/Models/model_160.model");
 		
 		//System.out.println(mlp.toString());
 		
 		mlp = (MultilayerPerceptron)o[0];
+		
+		eval.evaluateModel(mlp, current);
+		System.out.println(eval.toSummaryString("\nInitial Results\n======\n", false));
+		
 		mlp.setAutoBuild(false);
 		mlp.initializeClassifier(current);
 		
@@ -54,7 +60,7 @@ public class IterativeNeuralNetwork {
 		throw new Exception("Incompatible data!");
 
 		
-		Evaluation eval = new Evaluation(current);
+		
 		eval.evaluateModel(mlp, current);
 		System.out.println(eval.toSummaryString("\nInitial Results\n======\n", false));
 		

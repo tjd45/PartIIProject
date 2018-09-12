@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 
 public class ExperimentAnalysis {
 	protected static String[][] Entrant = new String[20][];
-	protected static String[][] Scrambles = new String[14][];
+	protected static String[][] Scrambles = new String[20][];
 	protected static int[] numSolved = new int[10];
 	protected static int[] numAttempted = new int[10];
 	protected static int[] numSolvedNeural = new int[10];

@@ -1,5 +1,5 @@
 X-moves,1,2,3,4,5,6,7,8,9,10,
-Percentage Solved Human,100,97.62,66.67,47.62,19.05,2.38,0.0,0.0,0.0,0.0,
-Percentage Solved Neural,100,100.0,100.0,100.0,73.81,59.52,45.24,11.9,4.76,4.76,
-Discrepancy for Neural,0,1,14,22,25,24,19,5,2,2,
+Percentage Solved Human,100,98.33,73.33,46.67,20.0,3.33,0.0,0.0,0.0,0.0,
+Percentage Solved Neural,100,100.0,100.0,100.0,78.33,65.0,43.33,11.67,3.33,3.33,
+Discrepancy for Neural,0,1,16,32,37,37,26,7,2,2,
 Discrepancy for Humans,0,0,0,0,2,0,0,0,0,0,

@@ -22,8 +22,8 @@ public class NeuralNetwork {
 	
 	static char[] nextMove = {'F','f','R','r','L','l','U','u','D','d','B','b'};
 	static boolean initialised = false;
-	static String[] availableModels = {"Model_20","Model_40","Model_80","Model_10_10","Model_10_20"
-			,"Model_10_40","Model_20_10","Model_20_20","Model_20_40"};
+	static String[] availableModels = {"Model_20","Model_40","Model_80","Model_160","Model_10_10","Model_10_20"
+			,"Model_10_40","Model_20_10","Model_20_20","Model_20_40","Model_40_10","Model_40_20","Model_40_40"};
 
 	static Instances instances;
 
@@ -33,7 +33,7 @@ public class NeuralNetwork {
 		DataSource source;
 		try {
 			source = new DataSource(new FileInputStream( new File("/Users/ThomasDavidson/Documents/Cambridge/Part II Project/Machine Learning Model Results/Ten Move Tests/Skeleton.arff")));
-
+			//source = new DataSource(new FileInputStream( new File("/Users/ThomasDavidson/Documents/workspace/Synthesis/TenMoves.arff")));
 
 
 			instances = source.getDataSet();
@@ -347,12 +347,28 @@ public class NeuralNetwork {
 	
 	public static void main(String[] args) throws Exception{
 
+//		System.out.println("Model_20");
+//		initialise("Model_20");
+//				Evaluation eval = new Evaluation(instances);
+//				eval.evaluateModel(mlp, instances);
+//				System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+//
+//				
+//				for(int i = 1; i<availableModels.length;i++){
+//					System.out.println(availableModels[i]);
+//					initialise(availableModels[i]);
+//					eval = new Evaluation(instances);
+//					eval.evaluateModel(mlp, instances);
+//					System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+//				}
+//				
 
-
-		//		Evaluation eval = new Evaluation(instances);
-		//		eval.evaluateModel(mlp, instances);
-		//		System.out.println(eval.toSummaryString("\nResults\n======\n", false));
-
+		
+		for(int i = 0; i<availableModels.length;i++){
+			System.out.println(availableModels[i]);
+			analyse(availableModels[i], 10000, 20, 0, 4, true);
+		}
+		
 
 		//		for(int i = 1; i<11;i++){
 		//			stepAnalyse(10000,i,true);
@@ -361,11 +377,23 @@ public class NeuralNetwork {
 		
 //		//Simple
 //		long startTime = System.nanoTime();
-//		analyse("Model_160",10000,100,1,4,true);
+//		analyse("Model_160",2000,100,1,4,false);
 //		long endTime = System.nanoTime();
 //		long duration = (endTime-startTime)/1000000000;
 //		System.out.println("Duration: "+duration);
-//
+		
+//		long startTime;
+//		long endTime;
+//		long duration;
+//		for(int i = 0; i<availableModels.length;i++){
+//			System.out.println(availableModels[i]);
+//			startTime = System.nanoTime();
+//			analyse(availableModels[i],2000,100,1,4,false);
+//			endTime = System.nanoTime();
+//			duration = (endTime-startTime)/1000000000;
+//			System.out.println("Duration: "+duration);
+//		}
+
 //		//BTS
 //		startTime = System.nanoTime();
 //		analyse("Model_160",10000,100,1,2,true);
@@ -387,11 +415,11 @@ public class NeuralNetwork {
 //		duration = (endTime-startTime)/1000000000;
 //		System.out.println("Duration: "+duration);
 		
-		long startTime = System.nanoTime();
-		hybridAnalyse("Model_160",10000,100,1,4,true);
-		long endTime = System.nanoTime();
-		long duration = (endTime-startTime)/1000000000;
-		System.out.println("Duration: "+duration);
+//		long startTime = System.nanoTime();
+//		hybridAnalyse("Model_160",10000,100,1,4,true);
+//		long endTime = System.nanoTime();
+//		long duration = (endTime-startTime)/1000000000;
+//		System.out.println("Duration: "+duration);
 
 
 

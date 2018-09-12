@@ -1306,7 +1306,7 @@ public class Solutions {
 		boolean cross = false;
 		//initialise variable for keeping track of number of pieces correctly placed
 		int limbs = 0;
-		//global variable for use withing analytics
+		//global variable for use within analytics
 		loopcounter1 = 0;
 
 		//loop until the cross has been formed

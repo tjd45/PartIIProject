@@ -1,22 +1,1 @@
-Participant No.,Age,Ethnicity,Gender,Occupation,Rubik's Cube Experience (Nov/Beg/Int/Adv),2-Move,,,3-Move,,,4-Move,,,5-Move,,,6-Move,,,7-Move,,,8-Move,,,9-Move,,,10-Move,,
-,,,,,,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3,Solve 1,Solve 2,Solve 3
-1,20,White,Female,Student - English,B,y,y,y,n,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-2,18,White British,Female,Student - Geography,N,y,y,n,n,y,n,n,n,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-3,20,White British,Female,Student - Computer Science,N,y,y,y,y,y,y,y,y,y,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-4,22,Indian,Male,Student - Modern Languages,N,y,y,y,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-5,19,White British,Female,Student - Maths,N,y,y,y,y,y,y,n,y,y,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-6,22,White British,Male,Student - Computer Science,A,y,y,y,y,y,y,y,y,y,y,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-7,58,White British,Female,Doctor of Medicine,B,y,y,y,y,n,n,n,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-8,54,White British,Male,Doctor of Medicine,B,y,y,y,y,y,n,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-9,22,White British,Male,Finance - Broker,B,y,y,y,y,n,n,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-10,21,White British,Male,Student - History,N,y,y,y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-11,21,White British,Male,Student - Engineering,I,y,y,y,y,y,y,y,y,y,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-12,21,White British,Male,Student - Economics,N,y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-13,27,White British,Male,Doctor of Medicine,B,y,y,y,y,y,y,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-14,21,White Irish,Male,Student - Engineering,N,y,y,y,y,n,n,n,n,y,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n,n
-15,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-16,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-17,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-18,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-19,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-20,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Participant No.,Age,Ethnicity,Gender,Occupation,Field,"Rubik's Cube Experience (0/1 0 : No experience, 1 : Some experience)",Percentage Solved,,,,,,,1,20,White,Female,Student,Arts,1,0.2592592592,18,White British,Female,Student,Arts,0,0.2222222223,20,White British,Female,Student,Science,0,0.370370374,22,Indian,Male,Student,Arts,0,0.1481481485,19,White British,Female,Student,Science,0,0.3333333336,22,White British,Male,Student,Science,1,0.4444444447,58,White British,Female,Professional,Science,1,0.1851851858,54,White British,Male,Professional,Science,1,0.2592592599,22,White British,Male,Professional,Science,1,0.22222222210,21,White British,Male,Student,Arts,0,0.22222222211,21,White British,Male,Student,Science,1,0.3703703712,21,White British,Male,Student,Science,0,0.14814814813,27,White British,Male,Professional,Science,1,0.25925925914,21,White Irish,Male,Student,Science,0,0.18518518515,20,White British,Female,Student,Arts,0,0.18518518516,21,White British,Male,Student,Arts,0,0.25925925917,23,White,Female,Student,Science,1,0.48148148118,20,White Other,Female,Student,Arts,0,0.25925925919,23,White British,Male,Student,Arts,0,0.29629629620,21,White British,Female,Student,Science,0,0.259259259

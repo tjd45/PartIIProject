@@ -137,14 +137,35 @@ public class Interact {
 		//		String sol = Solutions.solve(cube, "CFOP", false);
 		//		System.out.println(sol.length()+":"+sol);
 		//		}
-
-       Cube cube = new Cube();
+		
+		String longsolve = "";
+		String prunesolve = "";
+		String scram = "";
+		int totlength = 0;
+		int diflength = 0;
+		for(int i = 0; i<100000;i++){
+			Cube cube = new Cube();
+			scram = cube.scramble(20, false);
+			Cube cube2 = new Cube();
+			cube2.performAlgorithm(scram, false);
+			
+			longsolve = Solutions.longlongsolve(cube, "CFOP", false);
+			prunesolve = Solutions.solve(cube2, "CFOP", false);
+			
+			totlength+=longsolve.length();
+			diflength+=(longsolve.length()-prunesolve.length());
+			
+			
+		}
+		
+		System.out.println((double)diflength/(double)totlength);
+       //Cube cube = new Cube();
 //         cube.prettyPrint();
 //         cube.scramble(10, false);
 //         cube.prettyPrint();
          
          //Solutions.solve(cube, "Ortega", true);
-	cube.experimentScrambles(15);
+	//cube.experimentScrambles(20);
 
 		//Cube cube = new Cube();
 //		cube.scramble(50, false);
